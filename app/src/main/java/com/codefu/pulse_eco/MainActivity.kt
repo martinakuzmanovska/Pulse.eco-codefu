@@ -1,11 +1,14 @@
 package com.codefu.pulse_eco
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.codefu.pulse_eco.R
@@ -43,6 +46,31 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_pulse_eco -> {
+                    openAnotherApp("com.netcetera.skopjepulse")
+                    true
+                }
+                else -> {
+                    NavigationUI.onNavDestinationSelected(item, navController)
+                    true
+                }
+            }
+        }
+    }
 
+    private fun openAnotherApp(packageName: String) {
+        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+        if (launchIntent != null ) {
+            startActivity(launchIntent)
+        }
+        else {
+            val playStoreIntent = Intent (
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+            )
+            startActivity(playStoreIntent)
+        }
     }
 }
