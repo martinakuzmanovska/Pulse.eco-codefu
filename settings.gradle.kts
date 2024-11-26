@@ -6,7 +6,9 @@ pluginManagement {
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
             }
+
         }
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         mavenCentral()
         gradlePluginPortal()
     }
