@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.pulse_eco_codefu.databinding.FragmentNotificationsBinding
+import com.codefu.pulse_eco.databinding.FragmentNotificationsBinding
+
 
 class NotificationsFragment : Fragment() {
 
