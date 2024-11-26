@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.pulse_eco_codefu"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.pulse_eco_codefu"
