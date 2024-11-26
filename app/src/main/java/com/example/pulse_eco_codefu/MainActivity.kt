@@ -10,7 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.pulse_eco_codefu.databinding.ActivityMainBinding
+import com.codefu.pulse_eco.R
+import com.codefu.pulse_eco.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

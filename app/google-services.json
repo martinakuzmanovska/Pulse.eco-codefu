@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "744632346925",
+    "project_id": "pulse-eco-codefu",
+    "storage_bucket": "pulse-eco-codefu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744632346925:android:d0f751dd536b01992d4ba4",
+        "android_client_info": {
+          "package_name": "com.codefu.pulse_eco"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDC9u6PTYDa-WsWGg4ORXNbbCpPr0XJRFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
