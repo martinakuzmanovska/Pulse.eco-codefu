@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "744632346925",
+    "firebase_url": "https://pulse-eco-codefu-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "pulse-eco-codefu",
     "storage_bucket": "pulse-eco-codefu.firebasestorage.app"
   },
