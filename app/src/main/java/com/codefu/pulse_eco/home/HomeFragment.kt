@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu.ui.home
+package com.codefu.pulse_eco.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.pulse_eco_codefu.databinding.FragmentHomeBinding
+import com.codefu.pulse_eco.databinding.FragmentHomeBinding
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class HomeFragment : Fragment() {
 
