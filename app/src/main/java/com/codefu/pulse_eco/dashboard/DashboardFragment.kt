@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu.ui.dashboard
+package com.codefu.pulse_eco.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

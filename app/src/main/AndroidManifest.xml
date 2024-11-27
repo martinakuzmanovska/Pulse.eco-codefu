@@ -2,7 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,12 +21,21 @@
         android:theme="@style/Theme.PulseEcoCodeFu"
         tools:targetApi="31">
         <activity
+<<<<<<< HEAD
             android:name="com.example.pulse_eco_codefu.EmailPasswordActivity"
             android:exported="false" />
         <activity
             android:name="com.example.pulse_eco_codefu.MainActivity"
+=======
+            android:name=".QrCodeActivity"
+>>>>>>> e986b198b878eb736881d18c51a104ca3f41c3ff
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/title_activity_qr_code"
+            android:theme="@style/Theme.PulseEcoCodeFu" />
+        <activity
+            android:name="com.codefu.pulse_eco.MainActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
