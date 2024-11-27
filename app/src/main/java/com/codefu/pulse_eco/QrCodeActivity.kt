@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu
+package com.codefu.pulse_eco
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,9 +9,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.pulse_eco_codefu.qrcode.QrCodeGenerator
+import com.codefu.pulse_eco.qrcode.QrCodeGenerator
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 
@@ -28,7 +26,7 @@ class QrCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.qr_code_layout)
-        val qrCode:QrCodeGenerator= QrCodeGenerator()
+        val qrCode: QrCodeGenerator = QrCodeGenerator()
         qrCodeIV = findViewById(R.id.idIVQrcode);
         dataEdt = findViewById(R.id.idEdt);
         generateQrBtn = findViewById(R.id.idBtnGenerateQR);

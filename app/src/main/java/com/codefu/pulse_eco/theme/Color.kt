@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu.ui.theme
+package com.codefu.pulse_eco.theme
 
 import androidx.compose.ui.graphics.Color
 
