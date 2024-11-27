@@ -21,14 +21,7 @@
         android:theme="@style/Theme.PulseEcoCodeFu"
         tools:targetApi="31">
         <activity
-<<<<<<< HEAD
-            android:name="com.example.pulse_eco_codefu.EmailPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.pulse_eco_codefu.MainActivity"
-=======
             android:name=".QrCodeActivity"
->>>>>>> e986b198b878eb736881d18c51a104ca3f41c3ff
             android:exported="true"
             android:label="@string/title_activity_qr_code"
             android:theme="@style/Theme.PulseEcoCodeFu" />

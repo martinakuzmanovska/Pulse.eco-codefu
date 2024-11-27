@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu.qrcode
+package com.codefu.pulse_eco.qrcode
 
 import android.app.Activity
 import android.graphics.Bitmap
