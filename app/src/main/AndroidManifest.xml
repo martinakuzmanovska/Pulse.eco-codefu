@@ -13,6 +13,9 @@
         android:theme="@style/Theme.PulseEcoCodeFu"
         tools:targetApi="31">
         <activity
+            android:name="com.example.pulse_eco_codefu.EmailPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.pulse_eco_codefu.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
