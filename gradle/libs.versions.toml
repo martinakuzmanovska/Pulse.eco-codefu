@@ -22,6 +22,10 @@ composeBom = "2024.04.01"
 material3Android = "1.3.1"
 zxingAndroidEmbedded = "4.2.0"
 activity = "1.9.3"
+firebaseAuth = "23.1.0"
+playServicesAuth = "21.2.0"
+compose = "1.5.1"
+navigationCompose = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,9 +56,14 @@ androidx-material3-android = { group = "androidx.compose.material3", name = "mat
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
