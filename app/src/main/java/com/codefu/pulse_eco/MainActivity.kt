@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -48,6 +49,12 @@ class MainActivity : AppCompatActivity() {
 
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.navigation_home -> {
+                    // Navigate to LogInActivity
+                    val intent = Intent(this, LogInActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 R.id.navigation_pulse_eco -> {
                     openAnotherApp("com.netcetera.skopjepulse")
                     true

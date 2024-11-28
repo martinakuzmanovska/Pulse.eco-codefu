@@ -13,7 +13,20 @@
           "package_name": "com.codefu.pulse_eco"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "744632346925-lrsho945j3jpmrni8o15fjg6toak0b0f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codefu.pulse_eco",
+            "certificate_hash": "22efa2f1ad6c1865cba605584d7d227ddf01dc0d"
+          }
+        },
+        {
+          "client_id": "744632346925-6sih5q2t4forqkt34lcc0fq6efntphau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDC9u6PTYDa-WsWGg4ORXNbbCpPr0XJRFg"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744632346925-6sih5q2t4forqkt34lcc0fq6efntphau.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
