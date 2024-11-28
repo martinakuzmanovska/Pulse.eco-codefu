@@ -38,6 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.navigation_home -> {
+                    // Navigate to LogInActivity
+                    val intent = Intent(this, LogInActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 R.id.navigation_pulse_eco -> {
                     openAnotherApp("com.netcetera.skopjepulse")
                     true

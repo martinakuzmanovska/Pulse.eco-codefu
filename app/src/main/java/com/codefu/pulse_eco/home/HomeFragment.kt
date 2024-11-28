@@ -12,9 +12,17 @@ import com.codefu.pulse_eco.activities.ActivityViewModel
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
 import com.codefu.pulse_eco.domain.factories.ActivityViewModelFactory
 import com.codefu.pulse_eco.domain.repositories.ActivityRepository
-
+import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.google.android.gms.auth.api.identity.Identity
 
 class HomeFragment : Fragment() {
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = requireActivity().applicationContext,
+            oneTapClient = Identity.getSignInClient(requireActivity().applicationContext)
+        )
+    }
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -36,9 +44,11 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        googleAuthUiClient.getSignedInUser()?.let { homeViewModel.setUserValue(it) }
+
         val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        homeViewModel.user.observe(viewLifecycleOwner) {
+            textView.text = it.name + " is logged in"
         }
 
 

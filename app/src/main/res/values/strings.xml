@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="qr_code">qr_code</string>
+    <string name="enter_your_info">Enter your info</string>
+    <string name="generate_qr_code">Generate QR Code</string>
+    <string name="title_activity_qr_code">QrCodeActivity</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="default_web_client_id">744632346925-6sih5q2t4forqkt34lcc0fq6efntphau.apps.googleusercontent.com</string>
 </resources>
