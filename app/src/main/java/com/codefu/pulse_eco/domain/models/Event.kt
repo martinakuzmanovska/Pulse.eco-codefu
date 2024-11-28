@@ -8,6 +8,7 @@ class Event(
     override val activityName: String = "",
     override val points: Int = 0,
     override val description: String = "",
+    override val type: String = "",
     val date: String = "",
     val qrCodeString: String = ""
-) : Activity(id, activityName, points, description)
+) : Activity(id, activityName, points, description, type="event")
