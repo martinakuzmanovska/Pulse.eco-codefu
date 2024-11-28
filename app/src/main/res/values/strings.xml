@@ -8,4 +8,5 @@
     <string name="generate_qr_code">Generate QR Code</string>
     <string name="title_activity_qr_code">QrCodeActivity</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="title_activity_step_counter">StepCounterActivity</string>
 </resources>

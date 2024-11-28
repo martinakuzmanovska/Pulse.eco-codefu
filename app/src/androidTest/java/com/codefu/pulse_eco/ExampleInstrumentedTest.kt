@@ -1,4 +1,4 @@
-package com.example.pulse_eco
+package com.codefu
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

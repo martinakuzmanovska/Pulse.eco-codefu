@@ -45,7 +45,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation (libs.androidx.localbroadcastmanager)
     implementation(libs.material)
+
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -62,6 +64,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation (libs.core)
     implementation (libs.zxing.android.embedded)
+    implementation(libs.androidx.databinding.runtime)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -69,7 +74,13 @@ dependencies {
     implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation (libs.play.services.fitness.v2000)
+    implementation (libs.play.services.auth)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.activity.compose)
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material)
+    implementation(libs.play.services.fitness)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
