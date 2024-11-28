@@ -1,17 +1,19 @@
 package com.codefu.pulse_eco.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.codefu.pulse_eco.activities.ActivityViewModel
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
+import com.codefu.pulse_eco.domain.factories.ActivityViewModelFactory
+import com.codefu.pulse_eco.domain.repositories.ActivityRepository
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
 class HomeFragment : Fragment() {
 
@@ -34,7 +36,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
+
+        //val factory = ActivityViewModelFactory()
+        //val activityViewModel = ViewModelProvider(this, factory)[ActivityViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -45,8 +50,21 @@ class HomeFragment : Fragment() {
         homeViewModel.user.observe(viewLifecycleOwner) {
             textView.text = it.name + " is logged in"
         }
+
+
+//        activityViewModel.activities.observe(viewLifecycleOwner) { activities ->
+//            if (activities.isNullOrEmpty()) {
+//                textView.text = "No activities found."
+//            } else {
+//                textView.text =  activities.joinToString("\n") { it.toString() }
+//                Log.d("INFO", activities.joinToString("\n") { it.toString() })
+//            }
+//        }
+//        activityViewModel.getActivities()
+
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
