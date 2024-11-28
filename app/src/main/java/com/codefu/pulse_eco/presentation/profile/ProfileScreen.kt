@@ -26,13 +26,10 @@ fun ProfileScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if(userData?.profilePictureUrl != null) {
 
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        if(userData?.username != null) {
+        if(userData?.name != null) {
             Text(
-                text = userData.username,
+                text = userData.name,
                 textAlign = TextAlign.Center,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.SemiBold

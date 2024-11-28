@@ -8,10 +8,19 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
+import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
 class HomeFragment : Fragment() {
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = requireActivity().applicationContext,
+            oneTapClient = Identity.getSignInClient(requireActivity().applicationContext)
+        )
+    }
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -30,9 +39,11 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        googleAuthUiClient.getSignedInUser()?.let { homeViewModel.setUserValue(it) }
+
         val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        homeViewModel.user.observe(viewLifecycleOwner) {
+            textView.text = it.name + " is logged in"
         }
         return root
     }
