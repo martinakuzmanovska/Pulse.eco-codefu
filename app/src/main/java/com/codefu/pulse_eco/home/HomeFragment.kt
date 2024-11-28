@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.codefu.pulse_eco.activities.ActivityViewModel
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
 import com.codefu.pulse_eco.domain.factories.ActivityViewModelFactory
+import com.codefu.pulse_eco.domain.factories.EventViewModelFactory
 import com.codefu.pulse_eco.domain.repositories.ActivityRepository
+import com.codefu.pulse_eco.events.EventViewModel
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
 
@@ -41,6 +43,8 @@ class HomeFragment : Fragment() {
         //val factory = ActivityViewModelFactory()
         //val activityViewModel = ViewModelProvider(this, factory)[ActivityViewModel::class.java]
 
+        val eventViewModel = ViewModelProvider(this, EventViewModelFactory())[EventViewModel::class.java]
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -50,6 +54,8 @@ class HomeFragment : Fragment() {
         homeViewModel.user.observe(viewLifecycleOwner) {
             textView.text = it.name + " is logged in"
         }
+
+        eventViewModel.getEvents()
 
 
 //        activityViewModel.activities.observe(viewLifecycleOwner) { activities ->
