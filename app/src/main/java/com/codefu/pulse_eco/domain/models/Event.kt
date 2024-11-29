@@ -4,11 +4,11 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 class Event(
-    override val id: Int = 0,
     override val activityName: String = "",
     override val points: Int = 0,
     override val description: String = "",
     override val type: String = "",
-    val date: String = "",
-    val qrCodeString: String = ""
-) : Activity(id, activityName, points, description, type="event")
+    var date: String = "",
+    var averageValue: Double = 0.0,
+    var qrCodeString: String = ""
+) : Activity(activityName, points, description, type="event")
