@@ -23,7 +23,7 @@
         android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome Back"
+        android:text="Welcome"
         android:textSize="24sp"
         android:textColor="#2D572C"
         android:textStyle="bold"
