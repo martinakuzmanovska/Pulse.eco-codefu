@@ -1,6 +1,5 @@
-package com.example.pulse_eco_codefu.ui.theme
+package com.codefu.pulse_eco.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

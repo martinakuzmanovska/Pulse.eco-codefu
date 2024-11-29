@@ -1,4 +1,4 @@
-package com.example.pulse_eco_codefu
+package com.example.pulse_eco
 
 import org.junit.Test
 

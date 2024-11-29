@@ -62,16 +62,22 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation (libs.core)
     implementation (libs.zxing.android.embedded)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.navigation.compose)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.compose.material)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth.ktx)
 
 }
