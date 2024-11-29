@@ -25,6 +25,7 @@ material3Android = "1.3.1"
 playServicesAuth = "21.2.0"
 playServicesFitness = "21.2.0"
 playServicesFitnessVersion = "20.0.0"
+workRuntimeKtx = "2.10.0"
 zxingAndroidEmbedded = "4.2.0"
 activity = "1.9.3"
 databindingRuntime = "8.7.2"
@@ -39,6 +40,7 @@ androidx-compose-bom-v20241100 = { module = "androidx.compose:compose-bom", vers
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-material = { module = "androidx.compose.material:material" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 core = { module = "com.google.zxing:core", version.ref = "core" }
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

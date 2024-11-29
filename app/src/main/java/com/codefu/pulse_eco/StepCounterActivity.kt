@@ -1,44 +1,40 @@
 package com.codefu.pulse_eco
 
-import StepCounterViewModel
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
+import com.codefu.pulse_eco.broadcastReceivers.AlarmReceiver
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable
 import com.google.android.gms.fitness.FitnessLocal
 import com.google.android.gms.fitness.LocalRecordingClient
-import com.google.android.gms.fitness.data.LocalDataPoint
 import com.google.android.gms.fitness.data.LocalDataSet
 import com.google.android.gms.fitness.data.LocalDataType
 import com.google.android.gms.fitness.request.LocalDataReadRequest
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 
-class StepCounterActivity : AppCompatActivity() {
-    private  var steps:Int = 0
-    private lateinit var stepCounterViewModel: StepCounterViewModel
 
+class StepCounterActivity : AppCompatActivity() {
     companion object {
         private const val PERMISSION_REQUEST_ACTIVITY_RECOGNITION = 1001
     }
 
-    val timer = Timer()
+    private val timer = Timer()
 
 
     private lateinit var numberOfStepsTextView:TextView
@@ -49,7 +45,6 @@ class StepCounterActivity : AppCompatActivity() {
 
 
         numberOfStepsTextView=findViewById(R.id.stepCountTextView)
-        stepCounterViewModel=ViewModelProvider(this)[StepCounterViewModel::class.java]
         val localRecordingClient=FitnessLocal.getLocalRecordingClient(this)
 
         val hasMinPlayServices = isGooglePlayServicesAvailable(this, LocalRecordingClient.LOCAL_RECORDING_CLIENT_MIN_VERSION_CODE)
@@ -74,15 +69,56 @@ class StepCounterActivity : AppCompatActivity() {
         }
 
         readAndProcessFitnessData(localRecordingClient)
-
+        createAlarm(localRecordingClient)
         timer.schedule(object : TimerTask() {
             override fun run() {
                 readAndProcessFitnessData(localRecordingClient)
             }
-        }, 0, 100)
+        }, 0, 500)
 
 
     }
+
+
+    private fun createAlarm(localRecordingClient: LocalRecordingClient) {
+        //System request code
+        val DATA_FETCHER_RC = 123
+        //Create an alarm manager
+        val mAlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        //Create the time of day you would like it to go off. Use a calendar
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        readAndProcessFitnessData(localRecordingClient)
+        val steps:String= numberOfStepsTextView.text.toString()
+        val sharedPreferences = getSharedPreferences("StepCounter", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("steps", steps.toInt())
+        editor.apply()
+
+        //Create an intent that points to the receiver. The system will notify the app about the current time, and send a broadcast to the app
+        val intent = Intent(this, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            DATA_FETCHER_RC,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        //initialize the alarm by using inexactrepeating. This allows the system to scheduler your alarm at the most efficient time around your
+        //set time, it is usually a few seconds off your requested time.
+        // you can also use setExact however this is not recommended. Use this only if it must be done then.
+
+        //Also set the interval  using the AlarmManager constants
+        mAlarmManager.setInexactRepeating(
+            AlarmManager.RTC,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
 
     override fun onResume() {
         super.onResume()
