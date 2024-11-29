@@ -11,26 +11,23 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="#4CAF50"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_logo" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/logo"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:src="@drawable/ic_logo" />-->
 
         <ImageView
             android:id="@+id/globe_icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_globe" />
+
+
     </LinearLayout>
 
     <LinearLayout
