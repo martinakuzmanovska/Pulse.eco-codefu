@@ -1,41 +1,33 @@
 package com.codefu.pulse_eco
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.setContent
+import android.widget.ImageView
+
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 
-import androidx.compose.ui.Modifier
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.codefu.pulse_eco.databinding.ActivityLogInBinding
+import com.codefu.pulse_eco.databinding.ActivityMainBinding
 import com.codefu.pulse_eco.presentation.profile.ProfileScreen
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.codefu.pulse_eco.presentation.sign_in.SignInResult
 import com.codefu.pulse_eco.presentation.sign_in.SignInScreen
+import com.codefu.pulse_eco.presentation.sign_in.SignInState
 import com.codefu.pulse_eco.presentation.sign_in.SignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import com.codefu.pulse_eco.theme.PulseEcoCodeFuTheme
 import kotlinx.coroutines.launch
-
 class LogInActivity : AppCompatActivity() {
 
     private val googleAuthUiClient by lazy {
@@ -45,96 +37,66 @@ class LogInActivity : AppCompatActivity() {
         )
     }
 
+    private lateinit var launcher: ActivityResultLauncher<IntentSenderRequest>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_log_in)
+
+        actionBar.hide()
+
+        // Adjust window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        setContent {
-           PulseEcoCodeFuTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ){
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "sign_in") {
-                        composable("sign_in") {
-                            val viewModel = viewModel<SignInViewModel>()
-                            val state by viewModel.state.collectAsStateWithLifecycle()
-
-                            LaunchedEffect(key1 = Unit) {
-                                if(googleAuthUiClient.getSignedInUser() != null) {
-                                    navController.navigate("profile")
-                                }
-                            }
-
-                            val launcher = rememberLauncherForActivityResult(
-                                contract = ActivityResultContracts.StartIntentSenderForResult(),
-                                onResult = { result ->
-                                    if(result.resultCode == RESULT_OK) {
-                                        lifecycleScope.launch {
-                                            val signInResult = googleAuthUiClient.signInWithIntent(
-                                                intent = result.data ?: return@launch
-                                            )
-                                            viewModel.onSignInResult(signInResult)
-                                        }
-                                    }
-                                }
-                            )
-
-                            LaunchedEffect(key1 = state.isSignInSuccessful) {
-                                if(state.isSignInSuccessful) {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Sign in successful",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-
-                                    navController.navigate("profile")
-                                    viewModel.resetState()
-                                }
-                            }
-
-                            SignInScreen(
-                                state = state,
-                                onSignInClick = {
-                                    lifecycleScope.launch {
-                                        val signInIntentSender = googleAuthUiClient.signIn()
-                                        launcher.launch(
-                                            IntentSenderRequest.Builder(
-                                                signInIntentSender ?: return@launch
-                                            ).build()
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                        composable("profile") {
-                            ProfileScreen(
-                                userData = googleAuthUiClient.getSignedInUser(),
-                                onSignOut = {
-                                    lifecycleScope.launch {
-                                        googleAuthUiClient.signOut()
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Signed out",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                        navController.popBackStack()
-                                    }
-                                }
-                            )
-                        }
-                    }
+        // Register the ActivityResultLauncher for sign-in intents
+        launcher = registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                lifecycleScope.launch {
+                    val signInResult = googleAuthUiClient.signInWithIntent(
+                        intent = result.data ?: return@launch
+                    )
+                   handleSignInResult(signInResult)
                 }
-
             }
         }
+
+        // Set click listener on the Google ImageView
+        val googleImageView: ImageView = findViewById(R.id.google_sign_in)
+        googleImageView.setOnClickListener {
+            initiateSignIn()
+        }
+    }
+
+    private fun initiateSignIn() {
+        lifecycleScope.launch {
+            val signInIntentSender = googleAuthUiClient.signIn()
+            if (signInIntentSender != null) {
+                launcher.launch(IntentSenderRequest.Builder(signInIntentSender).build())
+            } else {
+                Toast.makeText(this@LogInActivity, "Error initiating sign-in.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun handleSignInResult(signInResult: SignInResult) {
+        if (signInResult.errorMessage.isNullOrEmpty()) {
+            Toast.makeText(this, "Sign in successful", Toast.LENGTH_LONG).show()
+            navigateToMainActivity()
+        } else {
+            Toast.makeText(this, "Sign in failed: ${signInResult.errorMessage}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
