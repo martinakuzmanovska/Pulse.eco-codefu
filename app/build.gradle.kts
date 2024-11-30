@@ -62,22 +62,45 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation (libs.core)
     implementation (libs.zxing.android.embedded)
+    implementation(libs.androidx.espresso.core)
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.work.runtime.ktx)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.compose.material)
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation (libs.play.services.fitness.v2000)
+    implementation (libs.play.services.auth)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.activity.compose)
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material)
+    implementation(libs.play.services.fitness)
 
+    // Firebase dependencies
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth)
+
+    // Work Manager dependencies
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation( libs.work.rxjava2)
+    implementation (libs.work.gcm)
+    androidTestImplementation (libs.androidx.work.testing)
+    implementation (libs.androidx.work.multiprocess)
+
+    // Retrofit dependencies
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
 }

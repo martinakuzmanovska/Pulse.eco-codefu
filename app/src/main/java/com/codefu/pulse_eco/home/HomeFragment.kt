@@ -50,9 +50,9 @@ class HomeFragment : Fragment() {
 
         googleAuthUiClient.getSignedInUser()?.let { homeViewModel.setUserValue(it) }
 
-        val textView: TextView = binding.textHome
+        val textView: TextView = binding.userFullName
         homeViewModel.user.observe(viewLifecycleOwner) {
-            textView.text = it.name + " is logged in"
+            textView.text =  homeViewModel.user.value?.name.toString()
         }
 
         eventViewModel.getEvents()
