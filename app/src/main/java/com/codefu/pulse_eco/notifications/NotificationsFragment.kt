@@ -38,7 +38,7 @@ class NotificationsFragment : Fragment() {
         val notificationsViewModel =
             ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
-        val logsViewModel = ViewModelProvider(this, UserActivityLogViewModelFactory())[UserActivityLogViewModel::class.java]
+        val logsViewModel = ViewModelProvider(this, UserActivityLogViewModelFactory(requireContext(). applicationContext))[UserActivityLogViewModel::class.java]
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root

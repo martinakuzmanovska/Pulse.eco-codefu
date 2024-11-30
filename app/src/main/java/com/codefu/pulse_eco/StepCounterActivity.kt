@@ -1,4 +1,4 @@
-package com.codefu.pulse_eco
+//package com.codefu.pulse_eco
 //
 //import android.Manifest
 //import android.annotation.SuppressLint
