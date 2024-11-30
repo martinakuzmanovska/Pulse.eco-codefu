@@ -108,4 +108,7 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
 
+    //Location dependencies
+    implementation(libs.play.services.location)
+
 }
