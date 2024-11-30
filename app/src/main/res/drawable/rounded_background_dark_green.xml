@@ -1,0 +1,17 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color -->
+    <solid android:color="#4B9643" /> <!-- Green color -->
+
+    <!-- Rounded corners -->
+    <corners android:radius="20dp" /> <!-- Adjust the radius for desired roundness -->
+
+    <!-- Optional: Add padding inside the shape -->
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp" />
+
+    <!-- Optional: Add a border -->
+    <!--<stroke android:width="2dp" android:color="#FFFFFF" />-->
+</shape>

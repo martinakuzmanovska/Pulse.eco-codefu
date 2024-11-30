@@ -13,9 +13,15 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="MainActivity">
+      <SelectionState runConfigName="QrCodeActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="StepCounterActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+        <SelectionState runConfigName="MainActivity">
+            <option name="selectionMode" value="DROPDOWN" />
+        </SelectionState>
     </selectionStates>
   </component>
 </project>
