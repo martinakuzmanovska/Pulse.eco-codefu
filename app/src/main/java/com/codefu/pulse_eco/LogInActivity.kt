@@ -22,9 +22,6 @@ import com.codefu.pulse_eco.databinding.ActivityMainBinding
 import com.codefu.pulse_eco.presentation.profile.ProfileScreen
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.codefu.pulse_eco.presentation.sign_in.SignInResult
-import com.codefu.pulse_eco.presentation.sign_in.SignInScreen
-import com.codefu.pulse_eco.presentation.sign_in.SignInState
-import com.codefu.pulse_eco.presentation.sign_in.SignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import com.codefu.pulse_eco.theme.PulseEcoCodeFuTheme
 import kotlinx.coroutines.launch
@@ -44,7 +41,7 @@ class LogInActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_log_in)
 
-        actionBar.hide()
+        actionBar?.hide()
 
         // Adjust window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
