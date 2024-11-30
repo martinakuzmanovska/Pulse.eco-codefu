@@ -15,6 +15,15 @@
       },
       "oauth_client": [
         {
+          "client_id": "744632346925-5gign5pf0lgpajrcqjvfrmdolfr2kidr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codefu.pulse_eco",
+            "certificate_hash": "569137cd40a82420766211715814dc7f75d51b30"
+          }
+        },
+        {
+
           "client_id": "744632346925-9dccv4hep2slolk573jhet9js48hmdk4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -1,24 +1,33 @@
 package com.codefu.pulse_eco.domain.repositories.impl
 
+import android.content.Context
 import android.util.Log
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codefu.pulse_eco.domain.models.UserActivityLog
 import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
-import com.codefu.pulse_eco.utils.Constants.ACTIVITY_REF
+import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.codefu.pulse_eco.utils.Constants.ACTIVITY_USER_LOGS
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+
 
 class UserActivityLogRepositoryImpl (
     private val rootRefDB: DatabaseReference = Firebase.database.reference,
     private val  userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS))
     : UserActivityLogRepository{
 
+        private val applicationContext: Context = getApplicationContext()
+    private val googleAuthUiClient:GoogleAuthUiClient=GoogleAuthUiClient(applicationContext,
+        oneTapClient = Identity.getSignInClient(applicationContext))
         private var userActivityLogListener: ValueEventListener? = null
 
     override suspend fun fetchUserLogs(userId: String): List<UserActivityLog> {
@@ -51,6 +60,27 @@ class UserActivityLogRepositoryImpl (
        }
     }
 
+
+    override suspend fun createLog(
+
+        userId: String,
+        activityName: String,
+        date: String,
+        description: String,
+        points: Int,
+        onComplete: (Boolean) -> Unit
+    ) {
+        val user=googleAuthUiClient.getSignedInUser()
+        val userActivityLog:UserActivityLog=UserActivityLog(user?.userId,activityName,
+            LocalDateTime.now().atZone(
+                ZoneId.systemDefault()).toString(),
+            description,
+            points
+        )
+        userActivityLogRef.push().setValue(userActivityLog)
+
+    }
+
     fun detachUserActivityLogListener() {
         userActivityLogListener.let {
             if (it != null) {
@@ -60,12 +90,13 @@ class UserActivityLogRepositoryImpl (
 
         }
     }
+//    open val userId: String? = "",
+//    open val activityId: Int? = 0,
+//    open val date: String? = "",
+//    open val description: String? = "",
+//    open val points: Int? = 0
 
-    override suspend fun createLog(
-        userActivityLog: UserActivityLog,
-        onComplete: (Boolean) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
+
+
 
 }
