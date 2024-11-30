@@ -99,3 +99,9 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
 
 
 }
+
+suspend fun main(){
+    val api = PulseEcoApiProvider.getPulseEcoApi()
+    val sensors = api.getAllPulseEcoSensors()
+    println(sensors)
+}

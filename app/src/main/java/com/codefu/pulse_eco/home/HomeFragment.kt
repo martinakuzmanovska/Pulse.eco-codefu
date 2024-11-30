@@ -16,12 +16,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.codefu.pulse_eco.LogInActivity
 import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.activities.ActivityViewModel
+import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
+import com.codefu.pulse_eco.apiClients.dataModels.findClosestSensor
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
 import com.codefu.pulse_eco.domain.factories.ActivityViewModelFactory
 import com.codefu.pulse_eco.domain.factories.EventViewModelFactory
@@ -33,6 +36,9 @@ import com.google.android.gms.location.LocationServices
 import java.util.Locale
 
 import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class HomeFragment : Fragment() {
 
@@ -71,15 +77,37 @@ class HomeFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         // Check for location permissions and get current location
-        if (checkLocationPermission()) {
-            getCurrentLocation()
-        } else {
-            // Optionally show message if permissions are not granted
-            Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
-        }
+
+//        if (checkLocationPermission()) {
+//          getCurrentLocation()
+//
+//        } else {
+//            // Optionally show message if permissions are not granted
+//            Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
+//        }
 
         return root
     }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            if (checkLocationPermission()) {
+                try {
+                    val latLong = getCurrentLocation()
+                    val result = getValuesForParticles(latLong)
+                    binding.pm10Value.text = result.pm10 + "µg/m³"
+                    binding.pm25Value.text = result.pm25 + "µg/m³"
+                    binding.noiseValue.text = result.noise + "dbA"
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     private fun checkLocationPermission(): Boolean {
         return if (ContextCompat.checkSelfPermission(
@@ -99,29 +127,37 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getCurrentLocation() {
-        try {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
+    private suspend fun getCurrentLocation(): LatLong {
+        return suspendCoroutine { continuation ->
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
 
-                    // Get address from latitude and longitude
-                    val address = getAddressFromLatLong(latitude, longitude)
+                        // Get address from latitude and longitude
+                        val address = getAddressFromLatLong(latitude, longitude)
 
-                    // Set address to TextView
-                    binding.locationAddress.text = address
-                    Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
+                        // Update UI
+                        binding.locationAddress.text = address
+                        Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
 
-                } else {
-                    Toast.makeText(requireContext(), "Unable to get location", Toast.LENGTH_LONG).show()
+                        continuation.resume(LatLong(latitude, longitude))
+                    } else {
+                        Toast.makeText(requireContext(), "Unable to get location", Toast.LENGTH_LONG).show()
+                        continuation.resumeWith(Result.failure(Exception("Location is null")))
+                    }
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                    continuation.resumeWith(Result.failure(exception))
                 }
+            } catch (e: SecurityException) {
+                Toast.makeText(requireContext(), "Permission denied or revoked: ${e.message}", Toast.LENGTH_LONG).show()
+                continuation.resumeWith(Result.failure(e))
             }
-        } catch (e: SecurityException) {
-            // Catch the exception if permission is not granted
-            Toast.makeText(requireContext(), "Permission denied or revoked: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun getAddressFromLatLong(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -137,19 +173,56 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private suspend  fun  getValuesForParticles(latLong: LatLong) : ValuesPulseEco{
+        val api = PulseEcoApiProvider.getPulseEcoApi()
+        val sensors = api.getAllPulseEcoSensors()
+        val sensorId = findClosestSensor(latLong.lat, latLong.long,sensors)?.sensorId
+        var noise = ""
+        var pm10 = ""
+        var pm25 = ""
+        var temperature = ""
+        for (s in sensors){
+            if (sensorId == s.sensorId && s.type == "noise_dba" )
+            {
+                noise = s.value
+            }
+            else if (sensorId == s.sensorId && s.type == "pm10" )
+            {
+                pm10 = s.value
+            }
+            else if (sensorId == s.sensorId && s.type == "pm25" ) {
+                pm25 = s.value
+            }
+            else if (sensorId == s.sensorId && s.type == "temperature" ) {
+                temperature = s.value
+            }
+
+
+        }
+        // pm 10, pm25, noise, temperature
+        return ValuesPulseEco(noise,pm10,pm25)
+    }
+
+
     // Handle permissions request result
+    @Suppress("deprecation")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1001) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation()
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                lifecycleScope.launch {
+                    val location = getCurrentLocation()
+                    // Use the retrieved location
+                    Toast.makeText(requireContext(), "Permission granted!", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
@@ -158,3 +231,7 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
+data class LatLong(val lat: Double, val long:Double)
+
+data class ValuesPulseEco(val noise: String, val pm10: String, val pm25: String, val temperature: String)
