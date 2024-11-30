@@ -63,9 +63,7 @@ class UserActivityLogRepositoryImpl (
     }
 
     override suspend fun createLog(
-        userId: String,
         activityName: String,
-        date: String,
         description: String,
         points: Int,
         onComplete: (Boolean) -> Unit
