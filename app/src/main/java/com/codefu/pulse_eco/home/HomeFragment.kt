@@ -43,8 +43,6 @@ class HomeFragment : Fragment() {
         //val factory = ActivityViewModelFactory()
         //val activityViewModel = ViewModelProvider(this, factory)[ActivityViewModel::class.java]
 
-        val eventViewModel = ViewModelProvider(this, EventViewModelFactory())[EventViewModel::class.java]
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -54,9 +52,6 @@ class HomeFragment : Fragment() {
         homeViewModel.user.observe(viewLifecycleOwner) {
             textView.text =  homeViewModel.user.value?.name.toString()
         }
-
-        eventViewModel.getEvents()
-
 
 //        activityViewModel.activities.observe(viewLifecycleOwner) { activities ->
 //            if (activities.isNullOrEmpty()) {

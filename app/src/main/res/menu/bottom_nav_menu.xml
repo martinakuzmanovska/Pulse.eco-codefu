@@ -12,7 +12,7 @@
         android:id="@+id/navigation_logs"
         android:layout_width="59dp"
         android:layout_height="56dp"
-        android:visible="false"
+
         android:title="Logs"
         android:icon="@drawable/logs"
         />
@@ -30,7 +30,6 @@
         android:id="@+id/navigation_event"
         android:layout_width="59dp"
         android:layout_height="56dp"
-        android:visible="false"
         android:title="Events"
         android:icon="@drawable/calendar"/>
 <!--        android:icon="@drawable/check_2_2"-->

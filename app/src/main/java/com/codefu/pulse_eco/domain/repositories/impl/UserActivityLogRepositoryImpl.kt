@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codefu.pulse_eco.domain.models.UserActivityLog
 import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
-import com.codefu.pulse_eco.utils.Constants.ACTIVITY_REF
 import com.codefu.pulse_eco.utils.Constants.ACTIVITY_USER_LOGS
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.database.DataSnapshot
@@ -15,12 +14,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.type.DateTime
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.random.Random
+
 
 class UserActivityLogRepositoryImpl (
     context: Context,
@@ -63,6 +61,7 @@ class UserActivityLogRepositoryImpl (
 
        }
     }
+
 
     override suspend fun createLog(
         activityName: String,
