@@ -25,7 +25,6 @@ class EventViewModel( private val repository: EventRepository) :ViewModel(){
                 Log.e("EventViewModel", "Error fetching events", e)
             }
         }
-
     }
 
     override fun onCleared() {
