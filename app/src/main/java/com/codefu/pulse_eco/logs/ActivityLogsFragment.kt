@@ -1,14 +1,17 @@
 package com.codefu.pulse_eco.logs
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codefu.pulse_eco.QrCodeActivity
 import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.activities.ActivityViewModel
 import com.codefu.pulse_eco.adapters.ActivityLogsAdapter
@@ -52,9 +55,17 @@ class ActivityLogsFragment : Fragment() {
             this, UserActivityLogViewModelFactory(UserActivityLogRepositoryImpl(requireContext(). applicationContext))
         )[UserActivityLogViewModel::class.java]
 
-        adapter = ActivityLogsAdapter(ArrayList())
+        adapter = ActivityLogsAdapter( ArrayList())
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
+        val button:ImageButton= _binding!!.fabAdd
+        button.setOnClickListener{
+
+            val intent = Intent(requireContext(), QrCodeActivity::class.java)
+            startActivity(intent)
+
+        }
+
 
 
         val userId = googleAuthUiClient.getSignedInUser()?.userId

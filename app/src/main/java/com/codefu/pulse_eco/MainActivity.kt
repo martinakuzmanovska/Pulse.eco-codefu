@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val activityRepository: ActivityRepository=ActivityRepositoryImpl()
         val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl(this)
-       addActivityLog(activityLogRepository)
+//       addActivityLog(activityLogRepository)
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -113,18 +113,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun addActivityLog(activityLogRepository: UserActivityLogRepository) {
-        // Launch a coroutine in the IO dispatcher
-        CoroutineScope(Dispatchers.IO).launch {
-            activityLogRepository.createLog( "JSP","Testing",10) { success ->
-                if (success) {
-                    println("Activity Log  created successfully!")
-                } else {
-                    println("Failed to create activity log.")
-                }
-            }
-        }
-
-    }
+//    private fun addActivityLog(activityLogRepository: UserActivityLogRepository) {
+//        // Launch a coroutine in the IO dispatcher
+//        CoroutineScope(Dispatchers.IO).launch {
+//            activityLogRepository.createLog( "JSP","Testing",10) { success ->
+//                if (success) {
+//                    println("Activity Log  created successfully!")
+//                } else {
+//                    println("Failed to create activity log.")
+//                }
+//            }
+//        }
+//
+//    }
 
 }
