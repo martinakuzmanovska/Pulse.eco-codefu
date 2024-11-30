@@ -89,7 +89,7 @@ class UserActivityLogRepositoryImpl (
         val month: Int = date.getMonthValue()
         val day: Int = date.getDayOfMonth()
         val result = String.format(
-            "Year: %d, Month: %02d, Day: %02d",
+            " %d.%02d.%02d",
             year, month, day,
         )
         return result
