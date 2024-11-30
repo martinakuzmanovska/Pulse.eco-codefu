@@ -54,6 +54,7 @@ class QrCodeActivity : AppCompatActivity() {
         val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             val scannedData = result.contents
+
             Toast.makeText(this, "Scanned data: $scannedData", Toast.LENGTH_SHORT).show()
         } else {
             super.onActivityResult(requestCode, resultCode, data)

@@ -1,9 +1,12 @@
 package com.codefu.pulse_eco.domain.repositories.impl
 
+import android.graphics.Bitmap
 import android.util.Log
+import android.widget.ImageView
 import com.codefu.pulse_eco.domain.models.Activity
 import com.codefu.pulse_eco.domain.models.Event
 import com.codefu.pulse_eco.domain.repositories.EventRepository
+import com.codefu.pulse_eco.qrcode.QrCodeGenerator
 import com.codefu.pulse_eco.utils.Constants.ACTIVITY_REF
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 class EventRepositoryImpl(
     private val rootRefDB: DatabaseReference = Firebase.database.reference,
     private val activitiesRef: DatabaseReference = rootRefDB.child(ACTIVITY_REF), ): EventRepository {
-
+    private val qrCodeGenerator:QrCodeGenerator= QrCodeGenerator()
     private var activityListener: ValueEventListener? = null
     private val eventsQuery: Query = activitiesRef.orderByChild("type").equalTo("event")
 
@@ -45,6 +48,17 @@ class EventRepositoryImpl(
             eventsQuery.addListenerForSingleValueEvent(activityListener!!)
         }
     }
+
+//    override suspend fun createEvent(
+//        eventName: String,
+//        points: Int,
+//        description: String,
+//        date: String,
+//        qrCodeString: String
+//    ) {
+//        val event:Event=Event(eventName,points,description,date,qrCodeString)
+//
+//    }
 
     fun detachActivityListener() {
         activityListener?.let {

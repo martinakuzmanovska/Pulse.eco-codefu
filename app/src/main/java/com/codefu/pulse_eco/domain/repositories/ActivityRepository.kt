@@ -5,6 +5,7 @@ import com.codefu.pulse_eco.domain.models.Activity
 
 interface ActivityRepository {
     suspend fun fetchActivities(): List<Activity>
-    suspend fun createActivities(activity: Activity,onComplete: (Boolean) -> Unit)
+    suspend fun createActivities(activityName: String,points:Int,description:String,onComplete: (Boolean) -> Unit)
+
 
 }
