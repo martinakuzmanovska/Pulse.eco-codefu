@@ -21,13 +21,15 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class UserActivityLogRepositoryImpl (
+    context: Context,
     private val rootRefDB: DatabaseReference = Firebase.database.reference,
-    private val  userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS))
+    private val  userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS),
+    )
     : UserActivityLogRepository{
 
-        private val applicationContext: Context = getApplicationContext()
-    private val googleAuthUiClient:GoogleAuthUiClient=GoogleAuthUiClient(applicationContext,
-        oneTapClient = Identity.getSignInClient(applicationContext))
+//        private val applicationContext: Context = getApplicationContext()
+    private val googleAuthUiClient:GoogleAuthUiClient=GoogleAuthUiClient(context,
+        oneTapClient = Identity.getSignInClient(context))
         private var userActivityLogListener: ValueEventListener? = null
 
     override suspend fun fetchUserLogs(userId: String): List<UserActivityLog> {
@@ -62,10 +64,7 @@ class UserActivityLogRepositoryImpl (
 
 
     override suspend fun createLog(
-
-        userId: String,
         activityName: String,
-        date: String,
         description: String,
         points: Int,
         onComplete: (Boolean) -> Unit
