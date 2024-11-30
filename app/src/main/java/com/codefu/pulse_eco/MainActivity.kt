@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val activityRepository: ActivityRepository=ActivityRepositoryImpl()
         val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl(this)
-//        addActivityLog(activityLogRepository)
+       addActivityLog(activityLogRepository)
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_event,
             )
         )
 

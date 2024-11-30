@@ -5,7 +5,11 @@ import com.codefu.pulse_eco.domain.models.UserActivityLog
 
 interface UserActivityLogRepository {
     suspend fun fetchUserLogs(userId: String): List<UserActivityLog>
-   suspend fun createLog(activityName:String,description:String,points:Int,onComplete: (Boolean) -> Unit)
+   suspend fun createLog(
+                         activityName: String,
+                         description: String,
+                         points: Int,
+                         onComplete: (Boolean) -> Unit)
 
 
 //      open val userId: String? = "",

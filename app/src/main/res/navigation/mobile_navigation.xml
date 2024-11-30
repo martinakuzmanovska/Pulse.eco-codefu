@@ -18,8 +18,20 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/navigation_event"
+        android:name="com.codefu.pulse_eco.events.EventsFragment"
+        android:label="@string/events"
+        tools:layout="@layout/fragment_events" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.codefu.pulse_eco.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_logs"
+        android:name="com.codefu.pulse_eco.logs.ActivityLogsFragment"
+        android:label="@string/activity_logs"
+        tools:layout="@layout/fragment_activity_logs" />
 </navigation>

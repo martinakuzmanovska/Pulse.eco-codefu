@@ -10,5 +10,6 @@ class Event(
     override val type: String = "",
     var date: String = "",
     var averageValue: Double = 0.0,
-    var qrCodeString: String = ""
+    var qrCodeString: String = "",
+    var imageUrl: String = "",
 ) : Activity(activityName, points, description, type="event")

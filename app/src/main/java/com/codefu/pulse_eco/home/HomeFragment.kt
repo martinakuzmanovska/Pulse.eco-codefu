@@ -200,7 +200,7 @@ class HomeFragment : Fragment() {
 
         }
         // pm 10, pm25, noise, temperature
-        return ValuesPulseEco(noise,pm10,pm25)
+        return ValuesPulseEco(noise,pm10,pm25,temperature)
     }
 
 
