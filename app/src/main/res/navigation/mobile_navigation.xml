@@ -28,4 +28,10 @@
         android:name="com.codefu.pulse_eco.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_logs"
+        android:name="com.codefu.pulse_eco.logs.ActivityLogsFragment"
+        android:label="@string/activity_logs"
+        tools:layout="@layout/fragment_activity_logs" />
 </navigation>

@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class UserActivityLogRepositoryImpl (
-    context: Context,
+    context: Context ,
     private val rootRefDB: DatabaseReference = Firebase.database.reference,
     private val  userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS),
     )
