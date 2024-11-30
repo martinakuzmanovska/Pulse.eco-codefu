@@ -128,7 +128,7 @@ class StepCounterActivity : AppCompatActivity() {
             override fun run() {
                 readAndProcessFitnessData(localRecordingClient)
             }
-        }, 0, 500)
+        }, 0, 1000)
 
 
     }
