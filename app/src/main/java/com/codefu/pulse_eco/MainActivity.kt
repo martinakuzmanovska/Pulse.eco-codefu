@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val activityRepository: ActivityRepository=ActivityRepositoryImpl()
-        val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl()
-        addActivityLog(activityLogRepository)
+        val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl(this)
+//        addActivityLog(activityLogRepository)
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
