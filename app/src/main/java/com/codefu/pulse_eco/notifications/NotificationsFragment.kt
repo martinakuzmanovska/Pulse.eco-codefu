@@ -57,8 +57,7 @@ class NotificationsFragment : Fragment() {
                 textView.text =
                 logs.joinToString("\n") { log ->
                     "Log description: ${log.description}, Log Points: ${log.activityId}"
-            }
-            }
+            }}
         }
 
         if (userId != null) {
