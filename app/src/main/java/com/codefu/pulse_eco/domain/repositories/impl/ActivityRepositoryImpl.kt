@@ -62,8 +62,24 @@ class ActivityRepositoryImpl(
             activityListener = null // Clear the reference
         }
     }
+//open val id: Int = 0,
+//    v
 
-    override suspend fun createActivities(activity: Activity,onComplete: (Boolean) -> Unit) {
-        // TODO
+    override suspend fun createActivities(
+        activityName: String,
+        points: Int,
+        description: String,
+        onComplete: (Boolean) -> Unit
+    ) {
+        val activity = Activity(activityName, points, description)
+        activitiesRef.push().setValue(activity)
+            .addOnSuccessListener {
+                onComplete(true) // Notify success
+            }
+            .addOnFailureListener { exception ->
+                println("Error adding activity: ${exception.message}")
+                onComplete(false) // Notify failure
+            }
+
     }
 }
