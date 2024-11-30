@@ -88,11 +88,9 @@ class UserActivityLogRepositoryImpl (
         val year: Int = date.year
         val month: Int = date.getMonthValue()
         val day: Int = date.getDayOfMonth()
-        val hour: Int = date.getHour()
-        val location: String = date.zone.toString()
         val result = String.format(
-            "Year: %d, Month: %02d, Day: %02d, Hour: %02d, Location: %s",
-            year, month, day, hour, location
+            "Year: %d, Month: %02d, Day: %02d",
+            year, month, day,
         )
         return result
     }
