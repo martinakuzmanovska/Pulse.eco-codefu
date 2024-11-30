@@ -94,4 +94,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    // Images dependencies
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+
 }

@@ -44,7 +44,7 @@ class LogInActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_log_in)
 
-        actionBar.hide()
+        actionBar?.hide()
 
         // Adjust window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
