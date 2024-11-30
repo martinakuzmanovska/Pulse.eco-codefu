@@ -32,7 +32,6 @@ okhttp = "4.9.3"
 retrofit = "2.2"
 workGcm = "2.9.1"
 workMultiprocess = "2.9.1"
-workRuntimeKtx = "2.8.1"
 workRuntimeKtxVersion = "2.9.1"
 workRxjava2 = "2.9.1"
 workTesting = "2.9.1"
@@ -43,6 +42,7 @@ hiltCommon = "1.2.0"
 firebaseAuth = "23.1.0"
 compose = "1.5.1"
 navigationCompose = "2.8.4"
+play-services-location = "21.0.1"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose" }
@@ -52,7 +52,6 @@ androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-material = { module = "androidx.compose.material:material" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
-androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-runtime-ktx-v291 = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtxVersion" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "workTesting" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
@@ -98,6 +97,7 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-databinding-runtime = { group = "androidx.databinding", name = "databinding-runtime", version.ref = "databindingRuntime" }
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -103,4 +103,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    //Location dependencies
+    implementation(libs.play.services.location)
+
 }
