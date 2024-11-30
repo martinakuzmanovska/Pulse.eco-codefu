@@ -40,9 +40,6 @@ class HomeFragment : Fragment() {
         val homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
 
-        //val factory = ActivityViewModelFactory()
-        //val activityViewModel = ViewModelProvider(this, factory)[ActivityViewModel::class.java]
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -52,16 +49,6 @@ class HomeFragment : Fragment() {
         homeViewModel.user.observe(viewLifecycleOwner) {
             textView.text =  homeViewModel.user.value?.name.toString()
         }
-
-//        activityViewModel.activities.observe(viewLifecycleOwner) { activities ->
-//            if (activities.isNullOrEmpty()) {
-//                textView.text = "No activities found."
-//            } else {
-//                textView.text =  activities.joinToString("\n") { it.toString() }
-//                Log.d("INFO", activities.joinToString("\n") { it.toString() })
-//            }
-//        }
-//        activityViewModel.getActivities()
 
         return root
     }

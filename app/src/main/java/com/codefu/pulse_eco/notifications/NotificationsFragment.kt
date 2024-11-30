@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.codefu.pulse_eco.databinding.FragmentNotificationsBinding
 import com.codefu.pulse_eco.domain.factories.UserActivityLogViewModelFactory
+import com.codefu.pulse_eco.domain.repositories.impl.UserActivityLogRepositoryImpl
 import com.codefu.pulse_eco.logs.UserActivityLogViewModel
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
@@ -38,7 +39,7 @@ class NotificationsFragment : Fragment() {
         val notificationsViewModel =
             ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
-        val logsViewModel = ViewModelProvider(this, UserActivityLogViewModelFactory(requireContext(). applicationContext))[UserActivityLogViewModel::class.java]
+        val logsViewModel = ViewModelProvider(this, UserActivityLogViewModelFactory(UserActivityLogRepositoryImpl(requireContext(). applicationContext)))[UserActivityLogViewModel::class.java]
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
