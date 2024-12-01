@@ -69,5 +69,6 @@
             android:text="points"
             app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteY="30dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,7 @@ class ActivityLogsFragment : Fragment() {
         )
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,11 +72,18 @@ class ActivityLogsFragment : Fragment() {
 
         val userId = googleAuthUiClient.getSignedInUser()?.userId
 
+        var points = 0
+
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
             val model = logs.map {
                 UserActivityLog(it.userId, it.activityName, it.date, it.description, it.points)
+
             }
+            points = logs.sumOf { it.points?.toInt() ?: 0 }
             adapter.updateData(model)
+
+           val pointsTextView = view?.findViewById<TextView>(R.id.points)
+            pointsTextView?.text = points.toString()
         }
 
         if (userId != null) {
