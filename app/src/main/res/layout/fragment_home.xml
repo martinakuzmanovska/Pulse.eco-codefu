@@ -57,12 +57,12 @@
 
 
             <TextView
-                android:id="@+id/location"
+                android:id="@+id/location_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="20dp"
-                android:text="Ljubicа Georgieva 2"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="8dp"
-                android:text="31 CAQI"
+                android:text=""
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -141,7 +141,7 @@
                 android:id="@+id/pm10_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 µg/m³"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -166,7 +166,7 @@
                 android:id="@+id/pm25_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18 µg/m³"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -191,7 +191,7 @@
                 android:id="@+id/noise_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="52 dBA"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

@@ -2,7 +2,6 @@ package com.codefu.pulse_eco.domain.repositories.impl
 
 import android.content.Context
 import android.util.Log
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codefu.pulse_eco.domain.models.UserActivityLog
 import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
@@ -16,6 +15,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -70,14 +70,29 @@ class UserActivityLogRepositoryImpl (
         onComplete: (Boolean) -> Unit
     ) {
         val user=googleAuthUiClient.getSignedInUser()
-        val userActivityLog:UserActivityLog=UserActivityLog(user?.userId,activityName,
-            LocalDateTime.now().atZone(
-                ZoneId.systemDefault()).toString(),
+        getDateTime()
+
+        val userActivityLog:UserActivityLog=UserActivityLog(
+            user?.userId, activityName,getDateTime(),
             description,
             points
         )
         userActivityLogRef.push().setValue(userActivityLog)
 
+    }
+
+    private fun getDateTime() :String{
+        val date: ZonedDateTime = LocalDateTime.now().atZone(
+            ZoneId.systemDefault()
+        )
+        val year: Int = date.year
+        val month: Int = date.getMonthValue()
+        val day: Int = date.getDayOfMonth()
+        val result = String.format(
+            " %d.%02d.%02d",
+            year, month, day,
+        )
+        return result
     }
 
     fun detachUserActivityLogListener() {

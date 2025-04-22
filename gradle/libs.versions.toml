@@ -44,6 +44,7 @@ hiltCommon = "1.2.0"
 firebaseAuth = "23.1.0"
 compose = "1.5.1"
 navigationCompose = "2.8.4"
+play-services-location = "21.0.1"
 coreKtxVersion = "1.6.1"
 
 [libraries]
@@ -101,6 +102,7 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-databinding-runtime = { group = "androidx.databinding", name = "databinding-runtime", version.ref = "databindingRuntime" }
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 [plugins]
