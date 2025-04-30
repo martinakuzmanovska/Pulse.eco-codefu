@@ -21,17 +21,6 @@ class ActivityRepositoryImpl(
 
     private var activityListener: ValueEventListener? = null
 
-//    override suspend fun fetchActivities(): List<Activity> {
-//        return try {
-//            val dataSnapshot = activitiesRef.get().await()
-//           dataSnapshot.children.mapNotNull { it.getValue(Activity::class.java) }
-//
-//        } catch (exception: Exception) {
-//            Log.e("firebase", "Error getting data", exception)
-//            emptyList()
-//        }
-//    }
-
     override suspend fun fetchActivities(): List<Activity> {
         return suspendCoroutine { continuation ->
             activityListener = object : ValueEventListener {
@@ -62,8 +51,6 @@ class ActivityRepositoryImpl(
             activityListener = null // Clear the reference
         }
     }
-//open val id: Int = 0,
-//    v
 
     override suspend fun createActivities(
         activityName: String,
