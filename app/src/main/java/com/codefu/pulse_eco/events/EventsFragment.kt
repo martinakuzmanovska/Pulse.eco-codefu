@@ -35,14 +35,23 @@ class EventsFragment : Fragment() {
         adapter = EventCardAdapter(requireContext(), ArrayList())
         binding.gridViewEvents.adapter = adapter
 
-
         eventViewModel.events.observe(viewLifecycleOwner) { events ->
             val eventCardModels = events.map {
-                EventCardModel(it.activityName, it.date, it.imageUrl, it.points)
+                EventCardModel(it.activityName, it.date, it.imageUrl, it.description, it.points)
             }
             adapter.updateData(eventCardModels)
         }
         eventViewModel.getEvents()
+
+        binding.gridViewEvents.setOnItemClickListener{_, _, position, _ ->
+            val selectedEvent = adapter.getItem(position)
+            val dialog = selectedEvent?.let {
+                AdditionalEventInformationDialogFragment
+                    .newInstance(it.getCardTitleText(), it.getDescription())
+            }
+
+            dialog?.show(parentFragmentManager, "event_dialog")
+        }
 
         return binding.root
     }

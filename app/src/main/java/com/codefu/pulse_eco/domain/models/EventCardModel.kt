@@ -1,8 +1,10 @@
 package com.codefu.pulse_eco.domain.models
 
+
 class EventCardModel (private var cardTitleText: String,
                       private var cardDate: String,
                       private var imgId: String,
+                      private var description: String,
                       private var points: Int
     ) {
 
@@ -10,26 +12,16 @@ class EventCardModel (private var cardTitleText: String,
         return cardTitleText
     }
 
-    fun setCardTitleText(cardTitleText: String) {
-        this.cardTitleText = cardTitleText
-    }
-
     fun getImgid(): String {
         return imgId
-    }
-
-    fun setImgid(imgid: String) {
-        this.imgId = imgid
     }
 
     fun getCardDate(): String {
         return cardDate
     }
 
-    fun setCardDate(cardDate: String) {
-        this.cardDate = cardDate
+    fun getDescription(): String {
+        return description
     }
-
-
 
 }

@@ -9,6 +9,7 @@ import com.codefu.pulse_eco.apiClients.PulseEcoApi
 import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
 import com.codefu.pulse_eco.domain.models.Event
 import com.codefu.pulse_eco.utils.Constants.ACTIVITY_REF
+import com.codefu.pulse_eco.utils.RandomImages.randomImages
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.runBlocking
 import java.time.DayOfWeek
@@ -57,6 +58,7 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
                     .takeIf { it.isNotEmpty() }
                     ?.average() ?: 0.0
 
+                val randomImageURL = randomImages[Random.nextInt(randomImages.size)]
                 event =  Event(
                     activityName = "Tree Planting Event " + Random.nextInt(0, 99999),
                     points = 10,
@@ -64,6 +66,7 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
                     description = "Organized event in a location in Skopje where the air quality is poor (high PM10).",
                     date =  ZonedDateTime.now().plusWeeks(1).toString(),
                     averageValue = average,
+                    imageUrl = randomImageURL,
                     qrCodeString = "Event_${getPM10Response.first().position}" )
 
             sensor to event

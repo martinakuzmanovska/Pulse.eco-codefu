@@ -25,7 +25,6 @@ class EventCardAdapter(
         val cardTitleDate = listItemView.findViewById<TextView>(R.id.cardDate)
         val cardImg = listItemView.findViewById<ImageView>(R.id.card_image)
 
-
         cardTitleText.text = model?.getCardTitleText() ?: ""
         cardTitleDate.text = model?.getCardDate() ?: ""
 
