@@ -24,4 +24,8 @@ class EventCardModel (private var cardTitleText: String,
         return description
     }
 
+    fun getPoints(): String{
+        return points.toString()
+    }
+
 }

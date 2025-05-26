@@ -1,5 +1,6 @@
 package com.codefu.pulse_eco.domain.repositories.impl
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.codefu.pulse_eco.domain.models.UserActivityLog
@@ -27,7 +28,7 @@ class UserActivityLogRepositoryImpl (
     )
     : UserActivityLogRepository{
 
-//        private val applicationContext: Context = getApplicationContext()
+
     private val googleAuthUiClient:GoogleAuthUiClient=GoogleAuthUiClient(context,
         oneTapClient = Identity.getSignInClient(context))
         private var userActivityLogListener: ValueEventListener? = null
@@ -58,10 +59,8 @@ class UserActivityLogRepositoryImpl (
            }
 
            userActivityLogRef.addListenerForSingleValueEvent(userActivityLogListener!!)
-
        }
     }
-
 
     override suspend fun createLog(
         activityName: String,
@@ -72,8 +71,10 @@ class UserActivityLogRepositoryImpl (
         val user=googleAuthUiClient.getSignedInUser()
         getDateTime()
 
-        val userActivityLog:UserActivityLog=UserActivityLog(
-            user?.userId, activityName,getDateTime(),
+        val userActivityLog = UserActivityLog(
+            user?.userId,
+            activityName,
+            getDateTime(),
             description,
             points
         )
@@ -81,6 +82,7 @@ class UserActivityLogRepositoryImpl (
 
     }
 
+    @SuppressLint("DefaultLocale")
     private fun getDateTime() :String{
         val date: ZonedDateTime = LocalDateTime.now().atZone(
             ZoneId.systemDefault()
@@ -104,13 +106,5 @@ class UserActivityLogRepositoryImpl (
 
         }
     }
-//    open val userId: String? = "",
-//    open val activityId: Int? = 0,
-//    open val date: String? = "",
-//    open val description: String? = "",
-//    open val points: Int? = 0
-
-
-
 
 }

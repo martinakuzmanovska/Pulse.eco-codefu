@@ -23,43 +23,19 @@
             android:layout_height="155dp"
             android:contentDescription="Event Image"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="HardcodedText" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/cardTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="3dp"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="8dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/cardDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Date"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10 points"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
 
 
     </LinearLayout>

@@ -1,19 +1,15 @@
 package com.codefu.pulse_eco.events
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.adapters.EventCardAdapter
 import com.codefu.pulse_eco.databinding.FragmentEventsBinding
 import com.codefu.pulse_eco.domain.factories.EventViewModelFactory
-import com.codefu.pulse_eco.domain.models.Event
 import com.codefu.pulse_eco.domain.models.EventCardModel
-import kotlinx.coroutines.launch
 
 class EventsFragment : Fragment() {
 
@@ -47,7 +43,7 @@ class EventsFragment : Fragment() {
             val selectedEvent = adapter.getItem(position)
             val dialog = selectedEvent?.let {
                 AdditionalEventInformationDialogFragment
-                    .newInstance(it.getCardTitleText(), it.getDescription())
+                    .newInstance(it.getCardTitleText(), it.getDescription(), it.getCardDate(), it.getPoints())
             }
 
             dialog?.show(parentFragmentManager, "event_dialog")
