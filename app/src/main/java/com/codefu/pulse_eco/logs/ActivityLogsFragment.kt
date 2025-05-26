@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.codefu.pulse_eco.QrCodeActivity
 import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.adapters.ActivityLogsAdapter
@@ -67,7 +66,7 @@ class ActivityLogsFragment : Fragment() {
                 UserActivityLog(it.userId, it.activityName, it.date, it.description, it.points)
 
             }
-            val points = logs.sumOf { it.points?.toInt() ?: 0 }
+            val points = logs.sumOf { it.points ?: 0 }
             adapter.updateData(model)
 
            val pointsTextView = view?.findViewById<TextView>(R.id.points)
