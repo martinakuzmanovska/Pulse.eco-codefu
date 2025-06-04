@@ -1,5 +1,6 @@
 package com.codefu.pulse_eco.domain.repositories.impl
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.codefu.pulse_eco.domain.models.UserActivityLog
@@ -13,9 +14,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -27,7 +30,7 @@ class UserActivityLogRepositoryImpl (
     )
     : UserActivityLogRepository{
 
-//        private val applicationContext: Context = getApplicationContext()
+
     private val googleAuthUiClient:GoogleAuthUiClient=GoogleAuthUiClient(context,
         oneTapClient = Identity.getSignInClient(context))
         private var userActivityLogListener: ValueEventListener? = null
@@ -42,8 +45,15 @@ class UserActivityLogRepositoryImpl (
                            val log = child.getValue(UserActivityLog::class.java)
                            if(log?.userId == userId) log else null
                        }
+
+                       val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+
+                       val sortedLogs = logs.sortedBy {
+                           LocalDate.parse(it.date, dateTimeFormatter)
+                       }
+
                        Log.d("Firebase", "Raw Data: ${snapshot.value}")
-                       continuation.resume(logs)
+                       continuation.resume(sortedLogs)
 
                    } catch (e: Exception) {
                        Log.e("Firebase", "Error parsing data", e)
@@ -58,10 +68,8 @@ class UserActivityLogRepositoryImpl (
            }
 
            userActivityLogRef.addListenerForSingleValueEvent(userActivityLogListener!!)
-
        }
     }
-
 
     override suspend fun createLog(
         activityName: String,
@@ -72,8 +80,10 @@ class UserActivityLogRepositoryImpl (
         val user=googleAuthUiClient.getSignedInUser()
         getDateTime()
 
-        val userActivityLog:UserActivityLog=UserActivityLog(
-            user?.userId, activityName,getDateTime(),
+        val userActivityLog = UserActivityLog(
+            user?.userId,
+            activityName,
+            getDateTime(),
             description,
             points
         )
@@ -81,6 +91,7 @@ class UserActivityLogRepositoryImpl (
 
     }
 
+    @SuppressLint("DefaultLocale")
     private fun getDateTime() :String{
         val date: ZonedDateTime = LocalDateTime.now().atZone(
             ZoneId.systemDefault()
@@ -104,13 +115,5 @@ class UserActivityLogRepositoryImpl (
 
         }
     }
-//    open val userId: String? = "",
-//    open val activityId: Int? = 0,
-//    open val date: String? = "",
-//    open val description: String? = "",
-//    open val points: Int? = 0
-
-
-
 
 }
