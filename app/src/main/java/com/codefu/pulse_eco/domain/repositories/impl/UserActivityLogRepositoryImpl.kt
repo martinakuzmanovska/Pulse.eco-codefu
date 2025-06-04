@@ -14,9 +14,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -43,8 +45,15 @@ class UserActivityLogRepositoryImpl (
                            val log = child.getValue(UserActivityLog::class.java)
                            if(log?.userId == userId) log else null
                        }
+
+                       val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+
+                       val sortedLogs = logs.sortedBy {
+                           LocalDate.parse(it.date, dateTimeFormatter)
+                       }
+
                        Log.d("Firebase", "Raw Data: ${snapshot.value}")
-                       continuation.resume(logs)
+                       continuation.resume(sortedLogs)
 
                    } catch (e: Exception) {
                        Log.e("Firebase", "Error parsing data", e)

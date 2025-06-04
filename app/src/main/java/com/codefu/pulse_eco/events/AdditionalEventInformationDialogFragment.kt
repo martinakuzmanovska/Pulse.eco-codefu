@@ -52,7 +52,7 @@ class AdditionalEventInformationDialogFragment: DialogFragment() {
             val pointsTextView = view.findViewById<TextView>(R.id.points)
 
 
-            val regex = Regex("""(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}\.\d+)([+-]\d{2}:\d{2})\[(.+)]""")
+            val regex = Regex("""(\d{2}-\d{2}-\d{4}) (\d{2}:\d{2})""")
             val matchResult = regex.find(cardDate)
             val dateTimeString = if (matchResult != null) {
                 val (date, time) = matchResult.destructured

@@ -36,7 +36,6 @@ class ActivityLogsFragment : Fragment() {
         )
     }
 
-
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +57,10 @@ class ActivityLogsFragment : Fragment() {
             startActivity(intent)
         }
 
-
-        val userId = googleAuthUiClient.getSignedInUser()?.userId
+        // IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Don't use this until google accounts are configured
+        // val userId = googleAuthUiClient.getSignedInUser()?.userId
+        val userId = "bojana"
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
             val model = logs.map {
@@ -79,6 +80,5 @@ class ActivityLogsFragment : Fragment() {
 
         return binding.root
     }
-
 
 }
