@@ -25,18 +25,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upcoming Events"
+        android:textColor="@color/green_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/gridViewEvents"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        tools:ignore="ExtraText" />
+
 
     <GridView
         android:id="@+id/gridViewEvents"
         android:layout_width="match_parent"
-        android:layout_height="640dp"
+        android:layout_height="570dp"
         android:horizontalSpacing="6dp"
         android:numColumns="2"
         android:verticalSpacing="15dp"
         android:paddingStart="20dp"
         android:layout_gravity="center"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints,RtlSymmetry"
         tools:layout_editor_absoluteX="0dp" />

@@ -1,7 +1,6 @@
 package com.codefu.pulse_eco.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.codefu.pulse_eco.apiClients.PulseEcoApi
@@ -9,9 +8,11 @@ import com.codefu.pulse_eco.apiClients.PulseEcoApi
 import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
 import com.codefu.pulse_eco.domain.models.Event
 import com.codefu.pulse_eco.utils.Constants.ACTIVITY_REF
+import com.codefu.pulse_eco.utils.RandomImages.randomImages
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.runBlocking
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -57,13 +58,17 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
                     .takeIf { it.isNotEmpty() }
                     ?.average() ?: 0.0
 
+                val randomImageURL = randomImages[Random.nextInt(randomImages.size)]
+                val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+                val currentTime = LocalDateTime.now().plusWeeks(1).format(formatter)
                 event =  Event(
                     activityName = "Tree Planting Event " + Random.nextInt(0, 99999),
                     points = 10,
                     type = "event",
                     description = "Organized event in a location in Skopje where the air quality is poor (high PM10).",
-                    date =  ZonedDateTime.now().plusWeeks(1).toString(),
+                    date =  currentTime,
                     averageValue = average,
+                    imageUrl = randomImageURL,
                     qrCodeString = "Event_${getPM10Response.first().position}" )
 
             sensor to event
