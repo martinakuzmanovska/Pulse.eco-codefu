@@ -1,3 +1,4 @@
+
 package com.codefu.pulse_eco.home
 
 import android.Manifest
@@ -137,33 +138,36 @@ class HomeFragment : Fragment() {
     private suspend fun getCurrentLocation(): LatLong {
         return suspendCoroutine { continuation ->
             try {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
+                val locationRequest = com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 
-                        // Get address from latitude and longitude
-                        val address = getAddressFromLatLong(latitude, longitude)
+                fusedLocationClient.getCurrentLocation(locationRequest, null)
+                    .addOnSuccessListener { location: Location? ->
+                        if (location != null) {
+                            val latitude = location.latitude
+                            val longitude = location.longitude
 
-                        // Update UI
-                        binding.locationAddress.text = address
-                        Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
+                            val address = getAddressFromLatLong(latitude, longitude)
+                            binding.locationAddress.text = address
+                            Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
 
-                        continuation.resume(LatLong(latitude, longitude))
-                    } else {
-                        Toast.makeText(requireContext(), "Unable to get location", Toast.LENGTH_LONG).show()
-                        continuation.resumeWith(Result.failure(Exception("Location is null")))
+                            continuation.resume(LatLong(latitude, longitude))
+                        } else {
+                            Toast.makeText(requireContext(), "Unable to get location", Toast.LENGTH_LONG).show()
+                            continuation.resumeWith(Result.failure(Exception("Location is null")))
+                        }
                     }
-                }.addOnFailureListener { exception ->
-                    Toast.makeText(requireContext(), "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                    continuation.resumeWith(Result.failure(exception))
-                }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(requireContext(), "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                        continuation.resumeWith(Result.failure(exception))
+                    }
+
             } catch (e: SecurityException) {
-                Toast.makeText(requireContext(), "Permission denied or revoked: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Permission denied: ${e.message}", Toast.LENGTH_LONG).show()
                 continuation.resumeWith(Result.failure(e))
             }
         }
     }
+
 
 
     private fun getAddressFromLatLong(latitude: Double, longitude: Double): String {
