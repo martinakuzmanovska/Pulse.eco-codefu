@@ -37,6 +37,9 @@ import java.util.Locale
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -96,6 +99,10 @@ class HomeFragment : Fragment() {
                 try {
                     val latLong = getCurrentLocation()
                     val result = getValuesForParticles(latLong)
+                    val currentTime = LocalTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format. Use "hh:mm a" for 12-hour with AM/PM
+                    val formattedTime = currentTime.format(formatter)
+                    binding.time.text = formattedTime.toString()
                     binding.pm10Value.text = result.pm10 + "µg/m³"
                     binding.pm25Value.text = result.pm25 + "µg/m³"
                     binding.noiseValue.text = result.noise + "dbA"

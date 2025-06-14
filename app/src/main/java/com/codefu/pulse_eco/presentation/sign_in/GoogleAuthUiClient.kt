@@ -1,5 +1,6 @@
 package com.codefu.pulse_eco.presentation.sign_in
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -21,6 +22,7 @@ class GoogleAuthUiClient (private val context: Context,
                           private val oneTapClient: SignInClient){
     private val auth = Firebase.auth
 
+    @SuppressLint("SuspiciousIndentation")
     suspend fun signIn(): IntentSender? {
         val result = try {
             oneTapClient.beginSignIn(

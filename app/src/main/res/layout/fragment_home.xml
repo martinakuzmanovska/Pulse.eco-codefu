@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="8dp"
-                android:text="18:32"
+                android:text=""
                 android:textSize="16sp" />
 
             <TextView
