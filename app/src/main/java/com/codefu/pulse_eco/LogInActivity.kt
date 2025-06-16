@@ -19,7 +19,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.codefu.pulse_eco.databinding.ActivityLogInBinding
 import com.codefu.pulse_eco.databinding.ActivityMainBinding
-import com.codefu.pulse_eco.presentation.profile.ProfileScreen
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.codefu.pulse_eco.presentation.sign_in.SignInResult
 import com.google.android.gms.auth.api.identity.Identity
