@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val activityRepository: ActivityRepository=ActivityRepositoryImpl()
@@ -45,12 +47,15 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
+        navView.menu.findItem(R.id.navigation_logs).isVisible = false
+        navView.menu.findItem(R.id.navigation_event).isVisible = false
+
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_event,
+                R.id.navigation_profile,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_event,
             )
         )
 
@@ -66,21 +71,31 @@ class MainActivity : AppCompatActivity() {
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_profile -> {
-                    // Navigate to LogInActivity
-                    val intent = Intent(this, LogInActivity::class.java)
-                    startActivity(intent)
-                    true
+                    val user = googleAuthUiClient.getSignedInUser()
+                    if (user == null) {
+                        // Navigate to LoginActivity if no user
+                        val intent = Intent(this, LogInActivity::class.java)
+                        startActivity(intent)
+                        true
+                    } else {
+                        // Navigate to ProfileFragment if user is signed in
+                        navController.navigate(R.id.navigation_profile)
+                        true
+                    }
                 }
+
                 R.id.navigation_pulse_eco -> {
                     openAnotherApp("com.netcetera.skopjepulse")
                     true
                 }
+
                 else -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
                     true
                 }
             }
         }
+
     }
 
     private fun openAnotherApp(packageName: String) {
@@ -109,6 +124,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun updateNavMenuVisibility() {
+        val navView: BottomNavigationView = binding.navView
+        val isUserSignedIn = !googleAuthUiClient.getSignedInUser()?.userId.isNullOrEmpty()
+        navView.menu.findItem(R.id.navigation_logs).isVisible = isUserSignedIn
+        navView.menu.findItem(R.id.navigation_event).isVisible = isUserSignedIn
     }
 
 //    private fun addActivityLog(activityLogRepository: UserActivityLogRepository) {

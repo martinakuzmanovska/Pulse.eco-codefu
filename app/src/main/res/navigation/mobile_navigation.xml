@@ -12,6 +12,16 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.codefu.pulse_eco.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+    <action
+        android:id="@+id/action_profileFragment_to_homeFragment"
+        app:destination="@id/navigation_home"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.codefu.pulse_eco.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"

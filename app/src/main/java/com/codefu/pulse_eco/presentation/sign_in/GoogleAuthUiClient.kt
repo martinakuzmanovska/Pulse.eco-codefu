@@ -17,21 +17,20 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 
-
-class GoogleAuthUiClient (private val context: Context,
-                          private val oneTapClient: SignInClient){
+class GoogleAuthUiClient(
+    private val context: Context,
+    private val oneTapClient: SignInClient
+) {
     private val auth = Firebase.auth
 
     @SuppressLint("SuspiciousIndentation")
     suspend fun signIn(): IntentSender? {
         val result = try {
-            oneTapClient.beginSignIn(
-                buildSignInRequest()
-            ).await()
-        } catch (e: Exception){
+            oneTapClient.beginSignIn(buildSignInRequest()).await()
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is CancellationException) throw e
-              null
+            if (e is CancellationException) throw e
+            null
         }
         return result?.pendingIntent?.intentSender
     }
@@ -40,76 +39,68 @@ class GoogleAuthUiClient (private val context: Context,
         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
         val googleIdToken = credential.googleIdToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
+
         return try {
             val user = auth.signInWithCredential(googleCredentials).await().user
-            user?.let { saveUserToDatabase(it) }
+            user?.let { checkAndSaveUser(it) }
+
             SignInResult(
                 data = user?.run {
                     UserData(
                         userId = uid,
                         name = displayName,
-                        email = email
+                        email = email,
+                        points = 0
                     )
-                }, errorMessage = null
+                },
+                errorMessage = null
             )
-
-        }
-        catch(e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            if(e is CancellationException) throw e
+            if (e is CancellationException) throw e
             SignInResult(data = null, errorMessage = e.message)
         }
-
     }
 
     suspend fun signOut() {
         try {
-            oneTapClient.signOut().await()
-            auth.signOut()
+            oneTapClient.signOut().await()  // clear One Tap client cache
+            auth.signOut()                  // sign out from Firebase auth
+            Log.d("GoogleAuthUiClient", "Successfully signed out")
         } catch (e: Exception) {
             e.printStackTrace()
             if(e is CancellationException) throw e
         }
     }
 
-    private fun saveUserToDatabase(user: FirebaseUser) {
+
+    private suspend fun checkAndSaveUser(user: FirebaseUser) {
         val database = Firebase.database.reference
-
-        // Check if the user already exists
-        database.child("users").child(user.uid).get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    // User already exists
-                    Log.d("FirebaseDB", "User already exists in the database")
-                } else {
-                    // User does not exist, save to database
-                    val userMap = mapOf(
-                        "uid" to user.uid,
-                        "name" to user.displayName,
-                        "email" to user.email,
-                        "photoUrl" to user.photoUrl.toString()
-                    )
-
-                    database.child("users").child(user.uid).setValue(userMap)
-                        .addOnSuccessListener {
-                            Log.d("FirebaseDB", "User saved successfully")
-                        }
-                        .addOnFailureListener {
-                            Log.e("FirebaseDB", "Failed to save user", it)
-                        }
-                }
+        try {
+            val snapshot = database.child("users").child(user.uid).get().await()
+            if (snapshot.exists()) {
+                Log.d("FirebaseDB", "User already exists in the database")
+            } else {
+                val userMap = mapOf(
+                    "uid" to user.uid,
+                    "name" to user.displayName,
+                    "email" to user.email,
+                    "photoUrl" to user.photoUrl.toString()
+                )
+                database.child("users").child(user.uid).setValue(userMap).await()
+                Log.d("FirebaseDB", "User saved successfully")
             }
-            .addOnFailureListener {
-                Log.e("FirebaseDB", "Error checking user existence", it)
-            }
+        } catch (e: Exception) {
+            Log.e("FirebaseDB", "Error checking or saving user", e)
+        }
     }
-
 
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
             userId = uid,
             name = displayName,
-            email = email
+            email = email,
+            points = 0
         )
     }
 
