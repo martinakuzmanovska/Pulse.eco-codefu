@@ -9,5 +9,5 @@ data class UserData(
     val userId: String,
     val name: String?,
     val email: String?,
-    val points: Int?
+    var points: Int?
 )

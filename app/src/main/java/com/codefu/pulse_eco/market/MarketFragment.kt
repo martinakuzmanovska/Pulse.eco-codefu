@@ -13,12 +13,20 @@ import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.databinding.FragmentMarketBinding
 import com.codefu.pulse_eco.domain.factories.ShopItemModelFactory
 import com.codefu.pulse_eco.domain.repositories.impl.ShopItemRepositoryImpl
-
+import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.google.android.gms.auth.api.identity.Identity
 class MarketFragment : Fragment() {
     private lateinit var adapter: ShopItemAdapter
     private lateinit var viewModel: ShopItemViewModel
     private var _binding: FragmentMarketBinding? = null
     private val binding get() = _binding!!
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = requireActivity().applicationContext,
+            oneTapClient = Identity.getSignInClient(requireActivity().applicationContext)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +39,24 @@ class MarketFragment : Fragment() {
             ShopItemModelFactory(ShopItemRepositoryImpl())
         )[ShopItemViewModel::class.java]
 
-        adapter = ShopItemAdapter(ArrayList())
+        googleAuthUiClient.getSignedInUser()?.let { viewModel.setUserValue(it) }
+
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.points.text = "Your Points: ${user.points}"
+        }
+
+        // Initial empty adapter
+        adapter = ShopItemAdapter(emptyList()) { item ->
+            viewModel.redeemItem(item) // <-- Handle the click here
+        }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
         viewModel.shopItems.observe(viewLifecycleOwner) { items ->
-            adapter = ShopItemAdapter(items)
+            adapter = ShopItemAdapter(items) { item ->
+                viewModel.redeemItem(item)
+            }
             binding.recyclerView.adapter = adapter
         }
 
