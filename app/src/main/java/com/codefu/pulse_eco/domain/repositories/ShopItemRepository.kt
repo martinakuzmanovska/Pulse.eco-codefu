@@ -10,5 +10,5 @@ interface ShopItemRepository {
     //    val url:String?=""
 
     suspend fun fetchShopItems(): List<ShopItem>
-    suspend fun createShopItem(name:String,pointsRequired:Int,description:String,url:String)
+    suspend fun createShopItem(name:String,pointsRequired:Int,description:String,url:String,onComplete: (Boolean) -> Unit)
 }
