@@ -1,6 +1,9 @@
 package com.codefu.pulse_eco.domain.models
 
-data class ShopItem(
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+open class ShopItem(
     val name:String?="",
     val pointsRequired:Int=0,
     val description:String?="",
