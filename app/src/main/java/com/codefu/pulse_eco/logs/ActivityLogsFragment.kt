@@ -57,10 +57,7 @@ class ActivityLogsFragment : Fragment() {
             startActivity(intent)
         }
 
-        // IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Don't use this until google accounts are configured
         val userId = googleAuthUiClient.getSignedInUser()?.userId
-       // val userId = "bojana"
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
             val model = logs.map {
