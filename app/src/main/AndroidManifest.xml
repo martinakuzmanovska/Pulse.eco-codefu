@@ -32,12 +32,6 @@
         <activity
             android:name=".LogInActivity"
             android:exported="false" />
-
-        <activity
-            android:name=".StepCounterActivity"
-            android:exported="true"
-            android:label="@string/title_activity_step_counter"
-            android:theme="@style/Theme.PulseEcoCodeFu" />
         <activity
             android:name=".QrCodeActivity"
             android:exported="true"
