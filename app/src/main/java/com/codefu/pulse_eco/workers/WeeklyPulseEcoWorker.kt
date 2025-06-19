@@ -86,7 +86,6 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
         return highestAveragePM10Event
     }
 
-
     private fun formatDateTimeForApi(): Pair<String, String> {
         val now = ZonedDateTime.now()
 
@@ -101,8 +100,6 @@ class WeeklyPulseEcoWorker(appContext: Context, workerParams: WorkerParameters)
 
         return Pair(firstDayFormatted, lastDayFormatted)
     }
-
-
 }
 
 suspend fun main(){
