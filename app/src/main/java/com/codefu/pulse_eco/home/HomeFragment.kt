@@ -135,7 +135,10 @@ class HomeFragment : Fragment() {
                             val longitude = location.longitude
 
                             val address = getAddressFromLatLong(latitude, longitude)
-                            binding.locationAddress.text = address
+                            _binding?.let { safeBinding ->
+                                safeBinding.locationAddress.text = address
+                            }
+
                             Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
 
                             continuation.resume(LatLong(latitude, longitude))
