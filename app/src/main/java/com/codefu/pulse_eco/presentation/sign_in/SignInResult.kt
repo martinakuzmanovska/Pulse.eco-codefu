@@ -6,8 +6,11 @@ class SignInResult(
 )
 
 data class UserData(
-    val userId: String,
-    val name: String?,
-    val email: String?,
-    var points: Int?
+    val userId: String? = null,
+    val name: String? = null,
+    val email: String? = null,
+    val photoUrl: String? = null,
+    val points: Int = 0,
+    val itemIds: List<String> = emptyList()
 )
+

@@ -42,4 +42,5 @@ class ShopItemAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
 }

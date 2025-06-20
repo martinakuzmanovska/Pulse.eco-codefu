@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val activityRepository: ActivityRepository=ActivityRepositoryImpl()
-        val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl(this)
+        val activityRepository: ActivityRepository = ActivityRepositoryImpl()
+        val activityLogRepository: UserActivityLogRepository = UserActivityLogRepositoryImpl(this)
 
         val navView: BottomNavigationView = binding.navView
 
@@ -55,7 +55,11 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_profile,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_market, R.id.navigation_event,
+                R.id.navigation_profile,
+                R.id.navigation_logs,
+                R.id.navigation_dashboard,
+                R.id.navigation_market,
+                R.id.navigation_event
             )
         )
 
@@ -73,28 +77,26 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_profile -> {
                     val user = googleAuthUiClient.getSignedInUser()
                     if (user == null) {
-                        // Navigate to LoginActivity if no user
-                        val intent = Intent(this, LogInActivity::class.java)
-                        startActivity(intent)
-                        true
+                        startActivity(Intent(this, LogInActivity::class.java))
+                        false  // Don't select Profile tab if user is not signed in
                     } else {
-                        // Navigate to ProfileFragment if user is signed in
-                        navController.navigate(R.id.navigation_profile)
-                        true
+                        // Only navigate if not already on Profile to avoid duplicate navigation
+                        if (navController.currentDestination?.id != R.id.navigation_profile) {
+                            navController.navigate(R.id.navigation_profile)
+                        }
+                        true  // Indicate event handled and selection updated
                     }
                 }
-
                 R.id.navigation_pulse_eco -> {
                     openAnotherApp("com.netcetera.skopjepulse")
-                    true
+                    false  // Don't update bottom nav selection because this is external
                 }
-
-                else -> {
-                    NavigationUI.onNavDestinationSelected(item, navController)
-                    true
-                }
+                else -> NavigationUI.onNavDestinationSelected(item, navController)
             }
         }
+
+
+
 
     }
 
