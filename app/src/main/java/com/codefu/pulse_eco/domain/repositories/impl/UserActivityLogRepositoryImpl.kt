@@ -26,7 +26,7 @@ import kotlin.coroutines.suspendCoroutine
 class UserActivityLogRepositoryImpl (
     context: Context ,
     private val rootRefDB: DatabaseReference = Firebase.database.reference,
-    private val  userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS),
+    private val userActivityLogRef: DatabaseReference = rootRefDB.child(ACTIVITY_USER_LOGS),
     )
     : UserActivityLogRepository{
 
@@ -40,11 +40,13 @@ class UserActivityLogRepositoryImpl (
            userActivityLogListener = object : ValueEventListener {
                override fun onDataChange(snapshot: DataSnapshot) {
                    try {
-                       val logs = snapshot.children.mapNotNull { 
-                           child ->
-                           val log = child.getValue(UserActivityLog::class.java)
-                           if(log?.userId == userId) log else null
-                       }
+                       val logs = snapshot.children
+                           .filter { it.key == userId }
+                           .flatMap { user ->
+                               user.children.mapNotNull {
+                                   child -> child.getValue(UserActivityLog::class.java)
+                               }
+                           }
 
                        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
 
