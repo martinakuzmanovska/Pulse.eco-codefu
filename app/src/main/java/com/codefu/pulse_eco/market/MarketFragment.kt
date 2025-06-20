@@ -14,11 +14,13 @@ import com.codefu.pulse_eco.domain.repositories.impl.ShopItemRepositoryImpl
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
 
+
 class MarketFragment : Fragment() {
     private lateinit var adapter: ShopItemAdapter
     private lateinit var viewModel: ShopItemViewModel
     private var _binding: FragmentMarketBinding? = null
     private val binding get() = _binding!!
+
 
     private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
@@ -27,18 +29,19 @@ class MarketFragment : Fragment() {
         )
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMarketBinding.inflate(inflater, container, false)
 
-
-
         viewModel = ViewModelProvider(
             this,
             ShopItemModelFactory(ShopItemRepositoryImpl())
         )[ShopItemViewModel::class.java]
+
 
         googleAuthUiClient.getSignedInUser()?.let { viewModel.setUserValue(it) }
         val headerProfileTitle = binding.includeHeader.profileTitle
@@ -46,6 +49,7 @@ class MarketFragment : Fragment() {
         viewModel.user.observe(viewLifecycleOwner) {
             headerProfileTitle.text = viewModel.user.value?.name.toString()
         }
+
         adapter = ShopItemAdapter(ArrayList())
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
