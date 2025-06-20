@@ -1,9 +1,7 @@
 package com.codefu.pulse_eco
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,12 +9,10 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.codefu.pulse_eco.databinding.ActivityMainBinding
+import com.codefu.pulse_eco.domain.repositories.ActivityRepository
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
-import com.codefu.pulse_eco.domain.repositories.ActivityRepository
-import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
-import com.codefu.pulse_eco.domain.repositories.impl.ActivityRepositoryImpl
-import com.codefu.pulse_eco.domain.repositories.impl.UserActivityLogRepositoryImpl
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,12 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val activityRepository: ActivityRepository=ActivityRepositoryImpl()
-        val activityLogRepository:UserActivityLogRepository=UserActivityLogRepositoryImpl(this)
 
         val navView: BottomNavigationView = binding.navView
 
@@ -55,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_profile,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_market, R.id.navigation_event,
+                R.id.navigation_profile,R.id.navigation_logs, R.id.navigation_dashboard, R.id.navigation_market, R.id.navigation_event,R.id.navigation_home
             )
         )
 
@@ -83,12 +75,6 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                 }
-
-                R.id.navigation_pulse_eco -> {
-                    openAnotherApp("com.netcetera.skopjepulse")
-                    true
-                }
-
                 else -> {
                     NavigationUI.onNavDestinationSelected(item, navController)
                     true
@@ -96,19 +82,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun openAnotherApp(packageName: String) {
-        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-        if (launchIntent != null) {
-            startActivity(launchIntent)
-        } else {
-            val playStoreIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-            )
-            startActivity(playStoreIntent)
-        }
     }
 
 
@@ -133,18 +106,5 @@ class MainActivity : AppCompatActivity() {
         navView.menu.findItem(R.id.navigation_event).isVisible = isUserSignedIn
     }
 
-//    private fun addActivityLog(activityLogRepository: UserActivityLogRepository) {
-//        // Launch a coroutine in the IO dispatcher
-//        CoroutineScope(Dispatchers.IO).launch {
-//            activityLogRepository.createLog( "JSP","Testing",10) { success ->
-//                if (success) {
-//                    println("Activity Log  created successfully!")
-//                } else {
-//                    println("Failed to create activity log.")
-//                }
-//            }
-//        }
-//
-//    }
 
 }

@@ -51,7 +51,7 @@ class ProfileFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 signOut()
                 (activity as? MainActivity)?.updateNavMenuVisibility()
-                findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
+                findNavController().navigate(R.id.navigation_home)
             }
         }
 

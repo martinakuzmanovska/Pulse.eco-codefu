@@ -58,6 +58,12 @@ class ActivityLogsFragment : Fragment() {
         }
 
         val userId = googleAuthUiClient.getSignedInUser()?.userId
+        googleAuthUiClient.getSignedInUser()?.let { viewModel.setUserValue(it) }
+
+        val headerProfileTitle = binding.includeHeader.profileTitle
+        viewModel.user.observe(viewLifecycleOwner) {
+            headerProfileTitle.text = viewModel.user.value?.name.toString()
+        }
 
         viewModel.logs.observe(viewLifecycleOwner) { logs ->
             val model = logs.map {
