@@ -2,45 +2,32 @@
 package com.codefu.pulse_eco.home
 
 import android.Manifest
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import com.codefu.pulse_eco.LogInActivity
-import com.codefu.pulse_eco.R
-import com.codefu.pulse_eco.activities.ActivityViewModel
 import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
 import com.codefu.pulse_eco.apiClients.dataModels.findClosestSensor
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
-import com.codefu.pulse_eco.domain.factories.ActivityViewModelFactory
 import com.codefu.pulse_eco.domain.factories.EventViewModelFactory
-import com.codefu.pulse_eco.domain.repositories.ActivityRepository
 import com.codefu.pulse_eco.events.EventViewModel
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.location.LocationServices
-import java.util.Locale
-
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -71,9 +58,9 @@ class HomeFragment : Fragment() {
 
         googleAuthUiClient.getSignedInUser()?.let { homeViewModel.setUserValue(it) }
 
-        val textView: TextView = binding.userFullName
+        val headerProfileTitle = binding.includeHeader.profileTitle
         homeViewModel.user.observe(viewLifecycleOwner) {
-            textView.text = homeViewModel.user.value?.name.toString()
+            headerProfileTitle.text = homeViewModel.user.value?.name.toString()
         }
 
         eventViewModel.getEvents()
@@ -93,6 +80,7 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
@@ -147,7 +135,10 @@ class HomeFragment : Fragment() {
                             val longitude = location.longitude
 
                             val address = getAddressFromLatLong(latitude, longitude)
-                            binding.locationAddress.text = address
+                            _binding?.let { safeBinding ->
+                                safeBinding.locationAddress.text = address
+                            }
+
                             Toast.makeText(requireContext(), "Address: $address", Toast.LENGTH_LONG).show()
 
                             continuation.resume(LatLong(latitude, longitude))

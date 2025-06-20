@@ -51,13 +51,13 @@ class StepCounterWorker(context: Context, workerParameters: WorkerParameters)
 
         val activityLogsRef = db.getReference("activity_user_logs/${userId}")
 
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
 
         val steps_log = UserActivityLog(
             userId = userId,
             activityName = "Daily Steps Count",
-            date = currentDate,
+            date = currentDate + "00:00",
             points = 10,
             description = "Daily Steps Count: $steps steps"
         )

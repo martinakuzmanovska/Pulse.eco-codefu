@@ -10,6 +10,8 @@ import com.codefu.pulse_eco.adapters.EventCardAdapter
 import com.codefu.pulse_eco.databinding.FragmentEventsBinding
 import com.codefu.pulse_eco.domain.factories.EventViewModelFactory
 import com.codefu.pulse_eco.domain.models.EventCardModel
+import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.google.android.gms.auth.api.identity.Identity
 
 class EventsFragment : Fragment() {
 
@@ -17,6 +19,13 @@ class EventsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var eventViewModel: EventViewModel
     private lateinit var adapter: EventCardAdapter
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            context = requireActivity().applicationContext,
+            oneTapClient = Identity.getSignInClient(requireActivity().applicationContext)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +36,13 @@ class EventsFragment : Fragment() {
         eventViewModel = ViewModelProvider(
             this, EventViewModelFactory()
         )[EventViewModel::class.java]
+
+        googleAuthUiClient.getSignedInUser()?.let { eventViewModel.setUserValue(it) }
+        val headerProfileTitle = binding.includeHeader.profileTitle
+
+        eventViewModel.user.observe(viewLifecycleOwner) {
+            headerProfileTitle.text = eventViewModel.user.value?.name.toString()
+        }
 
         adapter = EventCardAdapter(requireContext(), ArrayList())
         binding.gridViewEvents.adapter = adapter

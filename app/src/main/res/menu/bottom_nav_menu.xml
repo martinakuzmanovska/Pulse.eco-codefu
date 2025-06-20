@@ -16,15 +16,13 @@
         android:title="Logs"
         android:icon="@drawable/logs"
         />
-<!--        -->
-
 
     <item
-        android:id="@+id/navigation_pulse_eco"
-        android:icon="@drawable/ic_map"
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
         android:layout_width="59dp"
         android:layout_height="56dp"
-        android:title="Pulse.eco Map"/>
+        android:title="Home"/>
 
     <item
         android:id="@+id/navigation_event"

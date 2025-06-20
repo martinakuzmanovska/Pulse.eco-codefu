@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.codefu.pulse_eco.domain.models.UserActivityLog
 import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
 import com.codefu.pulse_eco.domain.repositories.impl.UserActivityLogRepositoryImpl
+import com.codefu.pulse_eco.presentation.sign_in.UserData
 import kotlinx.coroutines.launch
 
 class UserActivityLogViewModel (
@@ -15,6 +16,15 @@ class UserActivityLogViewModel (
         private val _logs = MutableLiveData<List<UserActivityLog>>()
     val logs : LiveData<List<UserActivityLog>>
         get() = _logs
+
+    private val _user =  MutableLiveData<UserData>()
+
+    val user : MutableLiveData<UserData> = _user
+
+    fun setUserValue(user: UserData) {
+        this._user.value = user
+    }
+
 
     fun getLogs(userId: String) {
         viewModelScope.launch {
