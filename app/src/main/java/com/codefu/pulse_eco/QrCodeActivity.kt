@@ -34,10 +34,10 @@ class QrCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.qr_code_layout)
-        val qrCode: QrCodeGenerator = QrCodeGenerator()
-        qrCodeIV = findViewById(R.id.idIVQrcode);
-        dataEdt = findViewById(R.id.idEdt);
-        generateQrBtn = findViewById(R.id.idBtnGenerateQR);
+        val qrCode = QrCodeGenerator()
+        qrCodeIV = findViewById(R.id.idIVQrcode)
+        dataEdt = findViewById(R.id.idEdt)
+        generateQrBtn = findViewById(R.id.idBtnGenerateQR)
         readQrBtn = findViewById(R.id.idBtnScanQR)
 
         generateQrBtn.setOnClickListener {

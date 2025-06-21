@@ -214,7 +214,7 @@ class HomeFragment : Fragment() {
         if (requestCode == 1001) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 lifecycleScope.launch {
-                    val location = getCurrentLocation()
+                    getCurrentLocation()
                     // Use the retrieved location
                     Toast.makeText(requireContext(), "Permission granted!", Toast.LENGTH_SHORT).show()
                 }
