@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.codefu.pulse_eco.R
@@ -24,7 +25,7 @@ class AdditionalEventInformationDialogFragment: DialogFragment() {
             args.putString(ARG_TITLE, title)
             args.putString(ARG_DATE, date)
             args.putString(ARG_POINTS, points)
-
+            Log.i("EVENT","new instance - $description")
             fragment.arguments = args
             return fragment
         }
@@ -36,7 +37,7 @@ class AdditionalEventInformationDialogFragment: DialogFragment() {
         val description = arguments?.getString(ARG_DESCRIPTION) ?: "No description"
         val cardDate = arguments?.getString(ARG_DATE) ?: "No date"
         val points = arguments?.getString(ARG_POINTS) ?: "No points"
-
+        Log.i("EVENT","on create: $description")
         return activity?.let {
             // Use the Builder class for convenient dialog construction.
             val builder = AlertDialog.Builder(it)
@@ -66,7 +67,9 @@ class AdditionalEventInformationDialogFragment: DialogFragment() {
             dateTextView.text = dateTimeString
             pointsTextView.text = "$points points"
             builder.setView(view)
-            builder.create()
+
+            return builder.create()
+
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
