@@ -159,8 +159,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
     private fun getAddressFromLatLong(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         return try {
@@ -216,7 +214,7 @@ class HomeFragment : Fragment() {
         if (requestCode == 1001) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 lifecycleScope.launch {
-                    val location = getCurrentLocation()
+                    getCurrentLocation()
                     // Use the retrieved location
                     Toast.makeText(requireContext(), "Permission granted!", Toast.LENGTH_SHORT).show()
                 }

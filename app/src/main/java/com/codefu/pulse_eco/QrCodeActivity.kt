@@ -3,6 +3,7 @@ package com.codefu.pulse_eco
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -19,7 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//TODO IF USER ADD SCAN  AND CREATE ELSE ONLY SCAN
+//TODO IF USER ADD SCAN AND CREATE ELSE ONLY SCAN
 
 
 class QrCodeActivity : AppCompatActivity() {
@@ -33,27 +34,25 @@ class QrCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.qr_code_layout)
-        val qrCode: QrCodeGenerator = QrCodeGenerator()
-        qrCodeIV = findViewById(R.id.idIVQrcode);
-        dataEdt = findViewById(R.id.idEdt);
-        generateQrBtn = findViewById(R.id.idBtnGenerateQR);
-           qrCode.readQRCode(this)
-//        generateQrBtn.setOnClickListener {
-//            val inputText = dataEdt.text.toString()
-//            if (inputText.isEmpty()) {
-//                // Show a toast if the input is empty
-//                Toast.makeText(this, "Enter some text to generate QR Code", Toast.LENGTH_SHORT).show()
-//            } else {
-//                // Generate the QR code
-//                qrCode.generateQRCode(inputText, qrCodeIV)
-//            }
-//        }
-//        readQrBtn.setOnClickListener{
-//
-//            qrCode.readQRCode(this)
-//        }
+        val qrCode = QrCodeGenerator()
+        qrCodeIV = findViewById(R.id.idIVQrcode)
+        dataEdt = findViewById(R.id.idEdt)
+        generateQrBtn = findViewById(R.id.idBtnGenerateQR)
+        readQrBtn = findViewById(R.id.idBtnScanQR)
 
-
+        generateQrBtn.setOnClickListener {
+            val inputText = dataEdt.text.toString()
+            if (inputText.isEmpty()) {
+                // Show a toast if the input is empty
+                Toast.makeText(this, "Enter some text to generate QR Code", Toast.LENGTH_SHORT).show()
+            } else {
+                // Generate the QR code
+                qrCode.generateQRCode(inputText, qrCodeIV)
+            }
+        }
+        readQrBtn.setOnClickListener{
+            qrCode.readQRCode(this)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,23 +60,27 @@ class QrCodeActivity : AppCompatActivity() {
         val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             val scannedData = result.contents
-            val data:List<String> =result.contents.split(":")
-           Toast.makeText(this, "Scanned data: $scannedData", Toast.LENGTH_SHORT).show()
-            CoroutineScope(Dispatchers.IO).launch {
-                activityLogsRepository.createLog(data[0],data[1],data[2].toInt()) { success ->
-                    if (success) {
-                        println("Activity Log  created successfully!")
 
-                    } else {
-                        println("Failed to create activity log.")
+            if (scannedData.isNotEmpty()) {
+                Toast.makeText(this, "Scanned data: $scannedData", Toast.LENGTH_SHORT).show()
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    activityLogsRepository.createLog(scannedData) { success ->
+                        if (success) {
+                            Log.i("QRLOG","Activity Log  created successfully!")
+
+                        } else {
+                            Log.i("QRLOG","Failed to create activity log.")
+                        }
                     }
                 }
             }
+            else{
+                Log.i("QRLOG","Invalid QR Code")
+            }
             finish()
-
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
-
     }
 }
