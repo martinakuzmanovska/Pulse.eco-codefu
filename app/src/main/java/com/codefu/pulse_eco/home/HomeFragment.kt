@@ -159,8 +159,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
     private fun getAddressFromLatLong(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         return try {

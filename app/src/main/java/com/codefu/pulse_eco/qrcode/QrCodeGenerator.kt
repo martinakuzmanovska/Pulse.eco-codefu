@@ -28,13 +28,12 @@ class QrCodeGenerator {
 
     }
 
-    public fun readQRCode(activity:Activity)
+    fun readQRCode(activity:Activity)
     {
         val integrator=IntentIntegrator(activity)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
         integrator.setBeepEnabled(false)
         integrator.setOrientationLocked(true)
         integrator.initiateScan()
-
     }
 }

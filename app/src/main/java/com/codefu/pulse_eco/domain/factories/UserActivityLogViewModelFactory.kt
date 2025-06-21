@@ -5,7 +5,6 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.codefu.pulse_eco.domain.repositories.UserActivityLogRepository
-import com.codefu.pulse_eco.domain.repositories.impl.UserActivityLogRepositoryImpl
 import com.codefu.pulse_eco.logs.UserActivityLogViewModel
 
 class UserActivityLogViewModelFactory(
