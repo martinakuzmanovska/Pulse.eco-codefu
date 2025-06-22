@@ -110,7 +110,7 @@ dependencies {
     // Images dependencies
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
-
+    implementation (libs.play.services.maps)
     //Location dependencies
     implementation(libs.play.services.location)
 
