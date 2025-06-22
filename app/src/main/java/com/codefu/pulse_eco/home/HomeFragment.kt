@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
 //            Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
 //        }
 
-        return root
+        return binding.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -95,7 +95,7 @@ class HomeFragment : Fragment() {
                     val formatter = DateTimeFormatter.ofPattern("HH:mm")
                     val formattedTime = currentTime.format(formatter)
 
-                    binding.time.text = "Current time: $formattedTime"
+                    binding.time.text = " $formattedTime"
                     binding.pm10Value.text = result.pm10 + "µg/m³"
                     binding.pm25Value.text = result.pm25 + "µg/m³"
                     binding.noiseValue.text = result.noise + "dbA"
@@ -125,7 +125,6 @@ class HomeFragment : Fragment() {
         binding.airQualityMessage.text = message
         binding.airQualityMessage.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
 
-        // Update smiley icon based on air quality
         val smileyRes = when {
             pm10Value < 20 -> R.drawable.ic_smile_happy
             pm10Value < 50 -> R.drawable.ic_smile
@@ -143,7 +142,6 @@ class HomeFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Permission is granted
             true
         } else {
             // Request permission
