@@ -1,20 +1,18 @@
 package com.codefu.pulse_eco.market
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codefu.pulse_eco.domain.models.Activity
 import com.codefu.pulse_eco.domain.models.ShopItem
 import com.codefu.pulse_eco.domain.repositories.ShopItemRepository
-import com.codefu.pulse_eco.domain.repositories.impl.ActivityRepositoryImpl
 import com.codefu.pulse_eco.domain.repositories.impl.ShopItemRepositoryImpl
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.codefu.pulse_eco.presentation.sign_in.UserData
-import com.google.firebase.database.database
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -75,13 +73,14 @@ class ShopItemViewModel(
         (repository as? ShopItemRepositoryImpl)?.detachActivityListener()
     }
 
-    fun redeemItem(item: ShopItem) {
+    fun redeemItem(context: Context, item: ShopItem) {
         val currentUser = _user.value ?: return
-        val newPoints = (currentUser.points ?: 0) - item.pointsRequired
+        val newPoints = currentUser.points - item.pointsRequired
 
-        // Update locally
-        _user.value = currentUser.copy(points = newPoints)
-
+        if (newPoints < 0){
+            Toast.makeText(context, "Not enough points to redeem", Toast.LENGTH_LONG).show()
+            return
+        }
         // Update in Firebase using the shared auth client function
         viewModelScope.launch {
             authClient.updateUserPointsAndItems(
@@ -90,5 +89,6 @@ class ShopItemViewModel(
                 newItemId = item.name.toString()
             )
         }
+        Toast.makeText(context, "Redeeming item...", Toast.LENGTH_SHORT).show()
     }
 }

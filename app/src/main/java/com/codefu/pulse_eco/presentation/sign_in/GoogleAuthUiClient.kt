@@ -139,8 +139,12 @@ class GoogleAuthUiClient(
                 "itemIds" to updatedItemIds
             )
 
+            Log.d("FirebaseDB", newPoints.toString())
             // Apply update
-            userRef.updateChildren(updates).await()
+            //userRef.updateChildren(updates).await()
+            userRef.child("points").setValue(newPoints).await()
+            userRef.child("itemIds").setValue(updatedItemIds).await()
+
             Log.d("FirebaseDB", "User points and items updated successfully")
 
         } catch (e: Exception) {

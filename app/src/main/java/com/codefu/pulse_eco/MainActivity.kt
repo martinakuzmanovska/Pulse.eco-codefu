@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.codefu.pulse_eco.databinding.ActivityMainBinding
 import com.codefu.pulse_eco.domain.repositories.ActivityRepository
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
+import com.codefu.pulse_eco.service.StepCounterService
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope

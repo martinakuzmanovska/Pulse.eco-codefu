@@ -46,7 +46,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val homeViewModel =
+        homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
 
 
@@ -56,7 +56,6 @@ class ProfileFragment : Fragment() {
         // Get signed in user from GoogleAuthUiClient and set to ViewModel
         val signedInUser = googleAuthUiClient.getSignedInUser()
         if (signedInUser != null) {
-            homeViewModel.setUserValue(signedInUser)
             userId = signedInUser.userId // Assuming UserData has id property
         }
 
@@ -68,7 +67,8 @@ class ProfileFragment : Fragment() {
         // Observe LiveData for user to update UI
         homeViewModel.user.observe(viewLifecycleOwner) { userData ->
             binding.profileName.text = userData?.name ?: ""
-            binding.pointsText.text = userData?.points?.toString() ?: "0"
+            binding.pointsText.text = "${userData?.points ?: 0} Points"
+            setupPointsProgress(userData?.points ?: 0)
         }
 
         // Purchase History button click shows dialog with current user itemIds
@@ -83,13 +83,6 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.navigation_home)
 
             }
-        }
-        val user = googleAuthUiClient.getSignedInUser()
-        user?.let {
-            homeViewModel.setUserValue(it)
-            binding.profileName.text = it.name ?: ""
-
-            fetchUserPoints(it.userId!!)
         }
 
         return root

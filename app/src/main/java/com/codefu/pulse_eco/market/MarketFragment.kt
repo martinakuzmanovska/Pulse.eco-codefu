@@ -11,13 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.codefu.pulse_eco.databinding.FragmentMarketBinding
 import com.codefu.pulse_eco.domain.factories.ShopItemModelFactory
 import com.codefu.pulse_eco.domain.repositories.impl.ShopItemRepositoryImpl
+import com.codefu.pulse_eco.home.HomeViewModel
 import com.codefu.pulse_eco.presentation.sign_in.GoogleAuthUiClient
 import com.google.android.gms.auth.api.identity.Identity
-import android.util.Log
 
 class MarketFragment : Fragment() {
     private lateinit var adapter: ShopItemAdapter
     private lateinit var viewModel: ShopItemViewModel
+    private lateinit var homeViewModel: HomeViewModel
+
     private var _binding: FragmentMarketBinding? = null
     private val binding get() = _binding!!
 
@@ -39,13 +41,22 @@ class MarketFragment : Fragment() {
             ShopItemModelFactory(ShopItemRepositoryImpl(), googleAuthUiClient)
         )[ShopItemViewModel::class.java]
 
-        googleAuthUiClient.getSignedInUser()?.let { viewModel.setUserValue(it) }
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        binding.points.text = "Your Points: " + viewModel.getUserValue()?.points.toString()
+
+        googleAuthUiClient.getSignedInUser()?.let {
+            viewModel.setUserValue(it)
+            viewModel.listenToUserData(it.userId!!) // 🔥 Listen to Firebase updates
+        }
+
+        // Observe user points in real-time
+        homeViewModel.user.observe(viewLifecycleOwner) { user ->
+            binding.points.text = "Your Points: ${user?.points ?: 0}"
+        }
 
         // Initial empty adapter
         adapter = ShopItemAdapter(emptyList()) { item ->
-            viewModel.redeemItem(item) // <-- Handle the click here
+            context?.let { viewModel.redeemItem(it, item) }
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -53,7 +64,7 @@ class MarketFragment : Fragment() {
 
         viewModel.shopItems.observe(viewLifecycleOwner) { items ->
             adapter = ShopItemAdapter(items) { item ->
-                viewModel.redeemItem(item)
+                context?.let { viewModel.redeemItem(it, item) }
             }
             binding.recyclerView.adapter = adapter
         }
