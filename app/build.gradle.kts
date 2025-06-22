@@ -83,6 +83,9 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.play.services.fitness)
 
+
+
+
     // Firebase dependencies
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)

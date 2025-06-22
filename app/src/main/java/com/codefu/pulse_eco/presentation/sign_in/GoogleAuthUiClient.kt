@@ -64,8 +64,8 @@ class GoogleAuthUiClient(
 
     suspend fun signOut() {
         try {
-            oneTapClient.signOut().await()  // clear One Tap client cache
-            auth.signOut()                  // sign out from Firebase auth
+            oneTapClient.signOut().await()
+            auth.signOut()
             Log.d("GoogleAuthUiClient", "Successfully signed out")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -85,7 +85,8 @@ class GoogleAuthUiClient(
                     "uid" to user.uid,
                     "name" to user.displayName,
                     "email" to user.email,
-                    "photoUrl" to user.photoUrl.toString()
+                    "photoUrl" to user.photoUrl.toString(),
+                    "points" to 0
                 )
                 database.child("users").child(user.uid).setValue(userMap).await()
                 Log.d("FirebaseDB", "User saved successfully")
