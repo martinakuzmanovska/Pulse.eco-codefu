@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
 import com.codefu.pulse_eco.apiClients.dataModels.findClosestSensor
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
@@ -88,13 +89,21 @@ class HomeFragment : Fragment() {
                 try {
                     val latLong = getCurrentLocation()
                     val result = getValuesForParticles(latLong)
+
+                    // Enhanced time display
                     val currentTime = LocalTime.now()
-                    val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format. Use "hh:mm a" for 12-hour with AM/PM
+                    val formatter = DateTimeFormatter.ofPattern("HH:mm")
                     val formattedTime = currentTime.format(formatter)
-                    binding.time.text = formattedTime.toString()
+
+                    binding.time.text = "Current time: $formattedTime"
                     binding.pm10Value.text = result.pm10 + "µg/m³"
                     binding.pm25Value.text = result.pm25 + "µg/m³"
                     binding.noiseValue.text = result.noise + "dbA"
+
+                    // Update air quality message based on PM10 value
+                    val pm10Value = result.pm10.toDoubleOrNull() ?: 0.0
+                    updateAirQualityMessage(pm10Value)
+
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -102,6 +111,29 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun updateAirQualityMessage(pm10Value: Double) {
+        val (message, colorRes) = when {
+            pm10Value < 20 -> Pair("Excellent air quality!", R.color.green)
+            pm10Value < 50 -> Pair("Good air quality", R.color.light_green)
+            pm10Value < 100 -> Pair("Moderate air quality", R.color.yellow)
+            pm10Value < 150 -> Pair("Poor air quality", R.color.orange)
+            else -> Pair("Very poor air quality", R.color.red)
+        }
+
+        binding.airQualityMessage.text = message
+        binding.airQualityMessage.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
+
+        // Update smiley icon based on air quality
+        val smileyRes = when {
+            pm10Value < 20 -> R.drawable.ic_smile_happy
+            pm10Value < 50 -> R.drawable.ic_smile
+            pm10Value < 100 -> R.drawable.ic_smile_neutral
+            pm10Value < 150 -> R.drawable.ic_smile_sad
+            else -> R.drawable.ic_smile_very_sad
+        }
+        binding.smileIcon.setImageResource(smileyRes)
     }
 
 
