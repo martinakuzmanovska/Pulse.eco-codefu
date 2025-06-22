@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.max
 
 class HomeFragment : Fragment() {
 
@@ -81,6 +82,14 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun calculateCAQI(pm10: Double, pm25: Double): Int {
+        val pm10Index = (pm10 / 50) * 100  // 50µg/m³ = CAQI 100
+        val pm25Index = (pm25 / 25) * 100  // 25µg/m³ = CAQI 100
+
+        return max(pm10Index, pm25Index).toInt().coerceAtMost(500) // Cap at 500
+    }
+
+
     @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
@@ -95,14 +104,17 @@ class HomeFragment : Fragment() {
                     val formatter = DateTimeFormatter.ofPattern("HH:mm")
                     val formattedTime = currentTime.format(formatter)
 
+                    val pm10Value = result.pm10.toDoubleOrNull() ?: 0.0
+                    val pm25Value = result.pm25.toDoubleOrNull() ?: 0.0
+                    val caqi = calculateCAQI(pm10Value, pm25Value)
+
+                    binding.caqiValue.text = caqi.toString()
                     binding.time.text = " $formattedTime"
                     binding.pm10Value.text = result.pm10 + "µg/m³"
                     binding.pm25Value.text = result.pm25 + "µg/m³"
                     binding.noiseValue.text = result.noise + "dbA"
 
-                    // Update air quality message based on PM10 value
-                    val pm10Value = result.pm10.toDoubleOrNull() ?: 0.0
-                    updateAirQualityMessage(pm10Value)
+                    updateAirQualityMessage(caqi)
 
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -113,26 +125,29 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateAirQualityMessage(pm10Value: Double) {
+
+    private fun updateAirQualityMessage(caqi: Int) {
         val (message, colorRes) = when {
-            pm10Value < 20 -> Pair("Excellent air quality!", R.color.green)
-            pm10Value < 50 -> Pair("Good air quality", R.color.light_green)
-            pm10Value < 100 -> Pair("Moderate air quality", R.color.yellow)
-            pm10Value < 150 -> Pair("Poor air quality", R.color.orange)
-            else -> Pair("Very poor air quality", R.color.red)
+            caqi < 25 -> Pair("Excellent air!", R.color.green)
+            caqi < 50 -> Pair("Good air", R.color.light_green)
+            caqi < 75 -> Pair("Moderate", R.color.yellow)
+            caqi < 100 -> Pair("Poor", R.color.orange)
+            else -> Pair("Very poor", R.color.red)
         }
 
         binding.airQualityMessage.text = message
         binding.airQualityMessage.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
 
+        // Update smiley based on CAQI
         val smileyRes = when {
-            pm10Value < 20 -> R.drawable.ic_smile_happy
-            pm10Value < 50 -> R.drawable.ic_smile
-            pm10Value < 100 -> R.drawable.ic_smile_neutral
-            pm10Value < 150 -> R.drawable.ic_smile_sad
+            caqi < 25 -> R.drawable.ic_smile_happy
+            caqi < 50 -> R.drawable.ic_smile
+            caqi < 75 -> R.drawable.ic_smile_neutral
+            caqi < 100 -> R.drawable.ic_smile_sad
             else -> R.drawable.ic_smile_very_sad
         }
         binding.smileIcon.setImageResource(smileyRes)
+    
     }
 
 
