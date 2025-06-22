@@ -46,12 +46,12 @@ class GoogleAuthUiClient(
 
             SignInResult(
                 data = user?.run {
+                    // Do NOT set points here — get points from database separately
                     UserData(
                         userId = uid,
                         name = displayName,
                         email = email,
-                        points = 0
-                    )
+                        points = 0 )
                 },
                 errorMessage = null
             )
@@ -73,7 +73,6 @@ class GoogleAuthUiClient(
         }
     }
 
-
     private suspend fun checkAndSaveUser(user: FirebaseUser) {
         val database = Firebase.database.reference
         try {
@@ -86,7 +85,9 @@ class GoogleAuthUiClient(
                     "name" to user.displayName,
                     "email" to user.email,
                     "photoUrl" to user.photoUrl.toString(),
-                    "points" to 0
+                    "points" to 0,  // Initialize points to 0 on user creation
+                    "itemIds" to emptyList<String>() // initialize purchase history empty list
+
                 )
                 database.child("users").child(user.uid).setValue(userMap).await()
                 Log.d("FirebaseDB", "User saved successfully")
@@ -96,12 +97,13 @@ class GoogleAuthUiClient(
         }
     }
 
+    // Return signed in user basic info from Firebase Auth without points
     fun getSignedInUser(): UserData? = auth.currentUser?.run {
         UserData(
             userId = uid,
             name = displayName,
             email = email,
-            points = 0
+            points = 0 // points come from database, so set null here
         )
     }
 
@@ -116,5 +118,37 @@ class GoogleAuthUiClient(
             )
             .setAutoSelectEnabled(true)
             .build()
+    }
+
+    suspend fun updateUserPointsAndItems(userId: String, newPoints: Int, newItemId: String) {
+        val database = Firebase.database.reference
+
+        try {
+            val userRef = database.child("users").child(userId)
+
+            // Get current itemIds list (if any)
+            val snapshot = userRef.get().await()
+            val currentItemIds = snapshot.child("itemIds").children.mapNotNull { it.getValue(String::class.java) }
+
+            // Add new item to the list
+            val updatedItemIds = currentItemIds.toMutableList().apply { add(newItemId) }
+
+            // Build update map
+            val updates = mapOf(
+                "points" to newPoints,
+                "itemIds" to updatedItemIds
+            )
+
+            Log.d("FirebaseDB", newPoints.toString())
+            // Apply update
+            //userRef.updateChildren(updates).await()
+            userRef.child("points").setValue(newPoints).await()
+            userRef.child("itemIds").setValue(updatedItemIds).await()
+
+            Log.d("FirebaseDB", "User points and items updated successfully")
+
+        } catch (e: Exception) {
+            Log.e("FirebaseDB", "Failed to update user data", e)
+        }
     }
 }

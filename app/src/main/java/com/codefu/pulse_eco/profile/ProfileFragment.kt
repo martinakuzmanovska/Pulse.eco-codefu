@@ -6,8 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+
 import androidx.core.content.ContextCompat
+
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,22 +37,43 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var homeViewModel: HomeViewModel
+
+    private var userId: String? = null  // You need to set this properly, e.g. from signed-in user or arguments
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        val homeViewModel =
+        homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
+
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        googleAuthUiClient.getSignedInUser()?.let { homeViewModel.setUserValue(it) }
+        // Get signed in user from GoogleAuthUiClient and set to ViewModel
+        val signedInUser = googleAuthUiClient.getSignedInUser()
+        if (signedInUser != null) {
+            userId = signedInUser.userId // Assuming UserData has id property
+        }
 
-        val textView: TextView = binding.profileName
-        homeViewModel.user.observe(viewLifecycleOwner) {
-            textView.text = it?.name ?: ""
+        // Fetch full user data from Firebase if userId is known
+        userId?.let {
+            homeViewModel.fetchUserData(it)
+        }
+
+        // Observe LiveData for user to update UI
+        homeViewModel.user.observe(viewLifecycleOwner) { userData ->
+            binding.profileName.text = userData?.name ?: ""
+            binding.pointsText.text = "${userData?.points ?: 0} Points"
+            setupPointsProgress(userData?.points ?: 0)
+        }
+
+        // Purchase History button click shows dialog with current user itemIds
+        binding.purchaseHistoryText.setOnClickListener {
+            showPurchaseHistoryDialog()
         }
 
         binding.logout.setOnClickListener {
@@ -59,17 +81,29 @@ class ProfileFragment : Fragment() {
                 signOut()
                 (activity as? MainActivity)?.updateNavMenuVisibility()
                 findNavController().navigate(R.id.navigation_home)
-            }
-        }
-        val user = googleAuthUiClient.getSignedInUser()
-        user?.let {
-            homeViewModel.setUserValue(it)
-            binding.profileName.text = it.name ?: ""
 
-            fetchUserPoints(it.userId)
+            }
         }
 
         return root
+    }
+
+    private fun showPurchaseHistoryDialog() {
+        // Use the latest user data from ViewModel
+        val user = homeViewModel.user.value
+        val itemIds = user?.itemIds ?: emptyList()
+
+        val message = if (itemIds.isEmpty()) {
+            "No purchase history available."
+        } else {
+            itemIds.joinToString(separator = "\n")
+        }
+
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Purchase History")
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .show()
     }
 
     private suspend fun signOut() {

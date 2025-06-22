@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.codefu.pulse_eco.domain.models.ShopItem
 import com.codefu.pulse_eco.R
-
 class ShopItemAdapter(
-    private val items: List<ShopItem>
+    private val items: List<ShopItem>,
+    private val onRedeemClick: (ShopItem) -> Unit
 ) : RecyclerView.Adapter<ShopItemAdapter.ShopItemViewHolder>() {
 
     class ShopItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -17,6 +17,7 @@ class ShopItemAdapter(
         val name: TextView = itemView.findViewById(R.id.shop_item_name)
         val description: TextView = itemView.findViewById(R.id.shop_item_description)
         val points: TextView = itemView.findViewById(R.id.shop_item_points)
+        val redeemButton: View = itemView.findViewById(R.id.redeem_button) // Add this line
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
@@ -34,7 +35,12 @@ class ShopItemAdapter(
             .load(item.url)
             .placeholder(R.drawable.ic_launcher_background)
             .into(holder.image)
+
+        holder.redeemButton.setOnClickListener {
+            onRedeemClick(item)
+        }
     }
 
     override fun getItemCount(): Int = items.size
+
 }
