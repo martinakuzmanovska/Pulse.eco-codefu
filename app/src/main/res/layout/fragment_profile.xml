@@ -88,11 +88,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="348 Points"
+                android:text="Loading points..."
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
+        <ProgressBar
+            android:id="@+id/points_progress"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/profile_info"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:max="1000"
+            android:progress="500"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
     </LinearLayout>
 
     <!-- Action Buttons Section -->
