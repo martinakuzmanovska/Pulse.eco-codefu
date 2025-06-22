@@ -1,10 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
 }
-
+val localProperties = gradleLocalProperties(rootDir,providers)
+val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
 android {
     namespace = "com.codefu.pulse_eco"
     compileSdk = 35
@@ -15,7 +18,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -83,6 +86,9 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.play.services.fitness)
 
+
+
+
     // Firebase dependencies
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
@@ -107,7 +113,7 @@ dependencies {
     // Images dependencies
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
-
+    implementation (libs.play.services.maps)
     //Location dependencies
     implementation(libs.play.services.location)
 

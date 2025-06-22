@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.codefu.pulse_eco.R
 import com.codefu.pulse_eco.apiClients.PulseEcoApiProvider
 import com.codefu.pulse_eco.apiClients.dataModels.findClosestSensor
 import com.codefu.pulse_eco.databinding.FragmentHomeBinding
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.max
 
 class HomeFragment : Fragment() {
 
@@ -77,8 +79,16 @@ class HomeFragment : Fragment() {
 //            Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_SHORT).show()
 //        }
 
-        return root
+        return binding.root
     }
+
+    private fun calculateCAQI(pm10: Double, pm25: Double): Int {
+        val pm10Index = (pm10 / 50) * 100  // 50µg/m³ = CAQI 100
+        val pm25Index = (pm25 / 25) * 100  // 25µg/m³ = CAQI 100
+
+        return max(pm10Index, pm25Index).toInt().coerceAtMost(500) // Cap at 500
+    }
+
 
     @SuppressLint("SetTextI18n")
     override fun onResume() {
@@ -88,13 +98,24 @@ class HomeFragment : Fragment() {
                 try {
                     val latLong = getCurrentLocation()
                     val result = getValuesForParticles(latLong)
+
+                    // Enhanced time display
                     val currentTime = LocalTime.now()
-                    val formatter = DateTimeFormatter.ofPattern("HH:mm") // 24-hour format. Use "hh:mm a" for 12-hour with AM/PM
+                    val formatter = DateTimeFormatter.ofPattern("HH:mm")
                     val formattedTime = currentTime.format(formatter)
-                    binding.time.text = formattedTime.toString()
+
+                    val pm10Value = result.pm10.toDoubleOrNull() ?: 0.0
+                    val pm25Value = result.pm25.toDoubleOrNull() ?: 0.0
+                    val caqi = calculateCAQI(pm10Value, pm25Value)
+
+                    binding.caqiValue.text = caqi.toString()
+                    binding.time.text = " $formattedTime"
                     binding.pm10Value.text = result.pm10 + "µg/m³"
                     binding.pm25Value.text = result.pm25 + "µg/m³"
                     binding.noiseValue.text = result.noise + "dbA"
+
+                    updateAirQualityMessage(caqi)
+
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -105,13 +126,37 @@ class HomeFragment : Fragment() {
     }
 
 
+    private fun updateAirQualityMessage(caqi: Int) {
+        val (message, colorRes) = when {
+            caqi < 25 -> Pair("Excellent air!", R.color.green)
+            caqi < 50 -> Pair("Good air", R.color.light_green)
+            caqi < 75 -> Pair("Moderate", R.color.yellow)
+            caqi < 100 -> Pair("Poor", R.color.orange)
+            else -> Pair("Very poor", R.color.red)
+        }
+
+        binding.airQualityMessage.text = message
+        binding.airQualityMessage.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
+
+        // Update smiley based on CAQI
+        val smileyRes = when {
+            caqi < 25 -> R.drawable.ic_smile_happy
+            caqi < 50 -> R.drawable.ic_smile
+            caqi < 75 -> R.drawable.ic_smile_neutral
+            caqi < 100 -> R.drawable.ic_smile_sad
+            else -> R.drawable.ic_smile_very_sad
+        }
+        binding.smileIcon.setImageResource(smileyRes)
+    
+    }
+
+
     private fun checkLocationPermission(): Boolean {
         return if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Permission is granted
             true
         } else {
             // Request permission
@@ -158,8 +203,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-
 
     private fun getAddressFromLatLong(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -216,7 +259,7 @@ class HomeFragment : Fragment() {
         if (requestCode == 1001) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 lifecycleScope.launch {
-                    val location = getCurrentLocation()
+                    getCurrentLocation()
                     // Use the retrieved location
                     Toast.makeText(requireContext(), "Permission granted!", Toast.LENGTH_SHORT).show()
                 }

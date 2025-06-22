@@ -51,8 +51,7 @@ class GoogleAuthUiClient(
                         userId = uid,
                         name = displayName,
                         email = email,
-                        points = 0 // or 0 if you want, but better null to indicate unknown yet
-                    )
+                        points = 0 )
                 },
                 errorMessage = null
             )
@@ -65,8 +64,8 @@ class GoogleAuthUiClient(
 
     suspend fun signOut() {
         try {
-            oneTapClient.signOut().await()  // clear One Tap client cache
-            auth.signOut()                  // sign out from Firebase auth
+            oneTapClient.signOut().await()
+            auth.signOut()
             Log.d("GoogleAuthUiClient", "Successfully signed out")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -88,6 +87,7 @@ class GoogleAuthUiClient(
                     "photoUrl" to user.photoUrl.toString(),
                     "points" to 0,  // Initialize points to 0 on user creation
                     "itemIds" to emptyList<String>() // initialize purchase history empty list
+
                 )
                 database.child("users").child(user.uid).setValue(userMap).await()
                 Log.d("FirebaseDB", "User saved successfully")
